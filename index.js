@@ -41,8 +41,16 @@ class Maze {
     }
 
     createPath() {
-        currentCell = this.grid[0][0];
+
+        currentCell = this.grid[6][0];
         currentCell.visited = true;
+        let neighbors = currentCell.findNeighbors();
+        // Pick a neighbor at random
+        let randomIndex = Math.floor(Math.random()*neighbors.length);
+        let randomNeighbor = neighbors[randomIndex];
+
+        randomNeighbor.fillGreen();
+        console.log(randomNeighbor);
     }
 }
 
@@ -147,8 +155,6 @@ let newMaze = new Maze(700, 400, 10, 10);
 newMaze.createGrid(0, 0, 0, 0);
 newMaze.createPath();
 currentCell.showCell();
-console.log(currentCell.findNeighbors());
-
 
 
 
