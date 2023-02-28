@@ -23,10 +23,11 @@ class Maze {
             x = 0;
             let row = [];
             for(let i = 0; i < this.numOfRows; i++) {
-                let cell = new Cell(rowNum, colNum);
+                let cell = new Cell(rowNum, colNum, this.cellWidth, this.cellHeight);
+                cell.showCell();
                 row.push(cell);
-                console.log(`X is ${x} and Y is ${y}`);
-                ctx.strokeRect(x, y, this.cellWidth, this.cellHeight);
+                // console.log(`X is ${x} and Y is ${y}`);
+                // ctx.strokeRect(x, y, this.cellWidth, this.cellHeight);
                 x += this.cellWidth;
                 rowNum += 1;
             }
@@ -38,11 +39,58 @@ class Maze {
 }
 
 class Cell {
-    constructor(rowNum, colNum) {
+    constructor(rowNum, colNum, cellWidth, cellHeight) {
         this.rowNum = rowNum;
         this.colNum = colNum;
+        this.cellWidth = cellWidth;
+        this.cellHeight = cellHeight;
         this.visited = false;
+        this.walls = {
+            topWall: true,
+            rightWall: true,
+            bottomWall: true,
+            leftWall: true
+        }
     }
+
+    drawTopWall(x, y, cellWidth) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + cellWidth, y);
+        ctx.stroke();
+    }
+
+    drawRightWall(x, y, cellWidth, cellHeight) {
+        ctx.beginPath();
+        ctx.moveTo(x + cellWidth, y);
+        ctx.lineTo(x + cellWidth, y + cellHeight);
+        ctx.stroke();
+    }
+
+    drawBottomWall(x, y, cellWidth, cellHeight) {
+        ctx.beginPath();
+        ctx.moveTo(x, y + cellHeight);
+        ctx.lineTo(x + cellWidth, y + cellHeight);
+        ctx.stroke();
+    }
+
+    drawLeftWall(x, y, cellHeight) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y + cellHeight);
+        ctx.stroke();
+    }
+
+    showCell() {
+        let x = this.rowNum * this.cellWidth;
+        let y = this.colNum * this.cellHeight;
+
+        if (this.walls.topWall) this.drawTopWall(x, y, this.cellWidth);
+        if (this.walls.rightWall) this.drawRightWall(x, y, this.cellWidth, this.cellHeight);
+        if (this.walls.bottomWall) this.drawBottomWall(x, y, this.cellWidth, this.cellHeight);
+        if (this.walls.leftWall) this.drawLeftWall (x, y, this.cellHeight);
+    }
+
 }
 
 //* Create a maze
