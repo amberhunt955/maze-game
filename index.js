@@ -1,6 +1,6 @@
 //* Grab the canvas and get context
 const canvas = document.getElementById("canvas");
-canvas.style.backgroundColor = "black";
+canvas.style.backgroundColor = "grey";
 const ctx = canvas.getContext("2d");
 
 //* Declare currentCell and previousCell variables
@@ -9,28 +9,28 @@ let previousCell;
 
 //* Create the Maze class
 class Maze {
-  constructor(mazeWidth, mazeHeight, numOfRows, numOfCols) {
+  constructor(width, height, numOfRows, numOfCols) {
     this.numOfRows = numOfRows;
-    this.numOfColumns = numOfCols;
+    this.numOfCols = numOfCols;
     this.grid = [];
     // Find cell width and height
-    this.cellWidth = mazeWidth / numOfRows;
-    this.cellHeight = mazeHeight / numOfCols;
+    this.cellWidth = width / numOfCols;
+    this.cellHeight = height / numOfRows;
     // Set the canvas as the maze size
-    canvas.width = mazeWidth;
-    canvas.height = mazeHeight;
+    canvas.width = width;
+    canvas.height = height;
   }
 
   createGrid(rowNum = 0, colNum = 0, x = 0, y = 0) {
-    for (let j = 0; j < this.numOfColumns; j++) {
+    for (let i = 0; i < this.numOfRows; i++) {
       // while (colNum !== this.mazeHeight) {
-      rowNum = 0;
       x = 0;
       let row = [];
-      for (let i = 0; i < this.numOfRows; i++) {
+
+      for (let j = 0; j < this.numOfCols; j++) {
         let cell = new Cell(
-          rowNum,
-          colNum,
+          i,
+          j,
           this.cellWidth,
           this.cellHeight,
           this.grid
@@ -38,17 +38,18 @@ class Maze {
         cell.showCell();
         row.push(cell);
         x += this.cellWidth;
-        rowNum += 1;
       }
+
       this.grid.push(row);
       y += this.cellHeight;
-      colNum += 1;
     }
+
+    console.log(x);
+    console.log(y);
   }
 
   buildPathFrom(cell = this.grid[0][0]) {
     currentCell = cell;
-
     //? If the cell has not been visited, mark cell as visited and find its unvisited neighbors
     while (currentCell.visited === false) {
       currentCell.visited = true;
@@ -58,13 +59,22 @@ class Maze {
       if (unvisitedNeighbors.length !== 0) {
         let nextCell = currentCell.chooseNeighbor();
         nextCell.previousCell = currentCell;
-        console.log(`Going to next cell`);
+        console.log(`Going to next cell printed below`);
         console.log(nextCell);
+        currentCell.breakDownWalls(nextCell);
+        currentCell.showCell();
+        nextCell.showCell();
+        console.log("Current cell -->");
+        console.log(currentCell);
+        console.log("Next cell -->");
+        console.log(nextCell);
+        console.log("----------------");
         this.buildPathFrom(nextCell);
-      // If there are not unvisited neighbors, go back to previous cell
+        // If there are not unvisited neighbors, go back to previous cell
       } else {
         previousCell = currentCell.previousCell;
         console.log(`Need to backtrack to previous cell`);
+        console.log("----------------");
         console.log(previousCell);
         this.buildPathFrom(previousCell);
       }
@@ -78,20 +88,27 @@ class Maze {
       if (unvisitedNeighbors.length !== 0) {
         let nextCell = currentCell.chooseNeighbor();
         nextCell.previousCell = currentCell;
-        console.log(`Going to next cell`);
+        console.log(`Going to next cell printed below`);
         console.log(nextCell);
+        currentCell.breakDownWalls(nextCell);
+        currentCell.showCell();
+        nextCell.showCell();
+        console.log("Current cell -->");
+        console.log(currentCell);
+        console.log("Next cell -->");
+        console.log(nextCell);
+        console.log("----------------");
         this.buildPathFrom(nextCell);
-      // If there are not unvisited neighbors, go back to previous cell
+        // If there are not unvisited neighbors, go back to previous cell
       } else {
         previousCell = currentCell.previousCell;
         console.log(`Need to backtrack to previous cell`);
+        console.log("----------------");
         console.log(previousCell);
         this.buildPathFrom(previousCell);
       }
     }
-
   }
-
 }
 
 //* Create the Cell class
@@ -110,6 +127,7 @@ class Cell {
       bottomWall: true,
       leftWall: true,
     };
+    this.position = "not set";
   }
 
   drawTopWall(x, y, cellWidth) {
@@ -141,22 +159,22 @@ class Cell {
   }
 
   showCell() {
-    let x = this.rowNum * this.cellWidth;
-    let y = this.colNum * this.cellHeight;
+    let x = this.colNum * this.cellWidth;
+    let y = this.rowNum * this.cellHeight;
 
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = "black";
     ctx.lineWidth = 3;
     ctx.fillStyle = "purple";
 
-    if (this.walls.topWall) this.drawTopWall(x, y, this.cellWidth);
-    if (this.walls.rightWall)
+    if (this.walls.topWall === true) this.drawTopWall(x, y, this.cellWidth);
+    if (this.walls.rightWall === true)
       this.drawRightWall(x, y, this.cellWidth, this.cellHeight);
-    if (this.walls.bottomWall)
+    if (this.walls.bottomWall === true)
       this.drawBottomWall(x, y, this.cellWidth, this.cellHeight);
-    if (this.walls.leftWall) this.drawLeftWall(x, y, this.cellHeight);
+    if (this.walls.leftWall === true) this.drawLeftWall(x, y, this.cellHeight);
 
     if (this.visited) {
-      ctx.fillRect(x, y, this.cellWidth, this.cellHeight);
+      // ctx.fillRect(x, y, this.cellWidth, this.cellHeight);
     }
   }
 
@@ -164,8 +182,8 @@ class Cell {
   fillGreen() {
     let x = this.rowNum * this.cellWidth;
     let y = this.colNum * this.cellHeight;
-    ctx.fillStyle = "green";
-    ctx.fillRect(x, y, this.cellWidth, this.cellHeight);
+    ctx.fillStyle = "lightgrey";
+    ctx.fillRect(x + 1, y + 1, this.cellWidth - 2, this.cellHeight - 2);
   }
 
   findNeighbors() {
@@ -175,15 +193,34 @@ class Cell {
     let leftNeighbor;
     let availableNeighbors = [];
 
-    // Check if there is a neighbor in the grid or not
-    if (this.colNum > 0)
-      topNeighbor = this.parentGrid[this.colNum - 1][this.rowNum];
-    if (this.rowNum < this.parentGrid[0].length - 1)
-      rightNeighbor = this.parentGrid[this.colNum][this.rowNum + 1];
-    if (this.colNum < this.parentGrid.length - 1)
-      bottomNeighbor = this.parentGrid[this.colNum + 1][this.rowNum];
-    if (this.rowNum > 0)
-      leftNeighbor = this.parentGrid[this.colNum][this.rowNum - 1];
+    // Check if there is a neighbor in the grid or not, set position
+    // if (this.colNum > 0) {
+    if (this.rowNum > 0) {
+      // topNeighbor = this.parentGrid[this.colNum - 1][this.rowNum];
+      topNeighbor = this.parentGrid[this.colNum][this.rowNum - 1];
+      topNeighbor.position = "top";
+    }
+
+    if (this.colNum < this.parentGrid.length - 1) {
+      // if (this.rowNum < this.parentGrid[0].length - 1) {
+      // rightNeighbor = this.parentGrid[this.colNum][this.rowNum + 1];
+      rightNeighbor = this.parentGrid[this.colNum + 1][this.rowNum];
+      rightNeighbor.position = "right";
+    }
+
+    // if (this.colNum < this.parentGrid.length - 1) {
+    if (this.rowNum < this.parentGrid[0].length - 1) {
+      // bottomNeighbor = this.parentGrid[this.colNum + 1][this.rowNum];
+      bottomNeighbor = this.parentGrid[this.colNum][this.rowNum + 1];
+      bottomNeighbor.position = "bottom";
+    }
+
+    // if (this.rowNum > 0) {
+    if (this.colNum > 0) {
+      // leftNeighbor = this.parentGrid[this.colNum][this.rowNum - 1];
+      leftNeighbor = this.parentGrid[this.colNum - 1][this.rowNum];
+      leftNeighbor.position = "left";
+    }
 
     // Check if the neighbors have been visited - if not, push them to currentNeighbors
     if (topNeighbor && topNeighbor.visited === false)
@@ -195,6 +232,8 @@ class Cell {
     if (leftNeighbor && leftNeighbor.visited === false)
       availableNeighbors.push(leftNeighbor);
 
+    console.log("Current cell available neighbors -->");
+    console.log(availableNeighbors);
     return availableNeighbors;
   }
 
@@ -207,10 +246,28 @@ class Cell {
 
     return randomNeighbor;
   }
+
+  breakDownWalls(nextCell) {
+    if (this.position === "top") {
+      this.walls.topWall = false;
+      nextCell.walls.bottomWall = false;
+    }
+    if (this.position === "right") {
+      this.walls.rightWall = false;
+      nextCell.walls.leftWall = false;
+    }
+    if (this.position === "bottom") {
+      this.walls.bottomWall = false;
+      nextCell.walls.topWall = false;
+    }
+    if (this.position === "left") {
+      this.walls.leftWall = false;
+      nextCell.walls.rightWall = false;
+    }
+  }
 }
 
 //* Create a maze
-let newMaze = new Maze(700, 400, 10, 10);
-newMaze.createGrid(0, 0, 0, 0);
-newMaze.buildPathFrom();
-currentCell.showCell();
+let newMaze = new Maze(700, 400, 10, 20);
+newMaze.createGrid();
+console.log(newMaze);
