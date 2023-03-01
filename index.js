@@ -35,7 +35,7 @@ class Maze {
           this.cellHeight,
           this.grid
         );
-        cell.showCell();
+        // cell.showCell();
         row.push(cell);
         x += this.cellWidth;
       }
@@ -50,26 +50,28 @@ class Maze {
 
   buildPathFrom(cell = this.grid[0][0]) {
     currentCell = cell;
+    console.log("Current cell -->");
+    console.log(currentCell);
     //? If the cell has not been visited, mark cell as visited and find its unvisited neighbors
     while (currentCell.visited === false) {
       currentCell.visited = true;
-      let unvisitedNeighbors = currentCell.findNeighbors();
+      currentCell.findNeighbors();
 
       // If there are unvisited neighbors, pick one and build path from there
-      if (unvisitedNeighbors.length !== 0) {
+      if (currentCell.neighbors.length !== 0) {
         let nextCell = currentCell.chooseNeighbor();
-        nextCell.previousCell = currentCell;
+        nextCell.cell.previousCell = currentCell;
         console.log(`Going to next cell printed below`);
         console.log(nextCell);
         currentCell.breakDownWalls(nextCell);
         currentCell.showCell();
-        nextCell.showCell();
+        // nextCell.cell.showCell();
         console.log("Current cell -->");
         console.log(currentCell);
         console.log("Next cell -->");
         console.log(nextCell);
         console.log("----------------");
-        this.buildPathFrom(nextCell);
+        this.buildPathFrom(nextCell.cell);
         // If there are not unvisited neighbors, go back to previous cell
       } else {
         previousCell = currentCell.previousCell;
@@ -82,23 +84,23 @@ class Maze {
 
     //! If the cell has been visited, check for unvisited neighbors
     while (currentCell !== this.grid[0][0]) {
-      let unvisitedNeighbors = currentCell.findNeighbors();
+      currentCell.findNeighbors();
 
       // If there are unvisited neighbors, build path from there
-      if (unvisitedNeighbors.length !== 0) {
+      if (currentCell.neighbors.length !== 0) {
         let nextCell = currentCell.chooseNeighbor();
-        nextCell.previousCell = currentCell;
+        nextCell.cell.previousCell = currentCell;
         console.log(`Going to next cell printed below`);
         console.log(nextCell);
         currentCell.breakDownWalls(nextCell);
         currentCell.showCell();
-        nextCell.showCell();
+        // nextCell.cell.showCell();
         console.log("Current cell -->");
         console.log(currentCell);
         console.log("Next cell -->");
         console.log(nextCell);
         console.log("----------------");
-        this.buildPathFrom(nextCell);
+        this.buildPathFrom(nextCell.cell);
         // If there are not unvisited neighbors, go back to previous cell
       } else {
         previousCell = currentCell.previousCell;
@@ -114,20 +116,22 @@ class Maze {
 //* Create the Cell class
 class Cell {
   constructor(rowNum, colNum, cellWidth, cellHeight, parentGrid) {
+    this.visited = false;
+    // Structure
     this.rowNum = rowNum;
     this.colNum = colNum;
     this.cellWidth = cellWidth;
     this.cellHeight = cellHeight;
     this.parentGrid = parentGrid;
-    this.visited = false;
-    this.previousCell;
     this.walls = {
       topWall: true,
       rightWall: true,
       bottomWall: true,
       leftWall: true,
     };
-    this.position = "not set";
+    // Friends
+    this.previousCell;
+    this.neighbors = [];
   }
 
   drawTopWall(x, y, cellWidth) {
@@ -166,12 +170,21 @@ class Cell {
     ctx.lineWidth = 3;
     ctx.fillStyle = "purple";
 
-    if (this.walls.topWall === true) this.drawTopWall(x, y, this.cellWidth);
-    if (this.walls.rightWall === true)
+    if (this.walls.topWall === true) {
+      this.drawTopWall(x, y, this.cellWidth);
+    }
+
+    if (this.walls.rightWall === true) {
       this.drawRightWall(x, y, this.cellWidth, this.cellHeight);
-    if (this.walls.bottomWall === true)
+    }
+
+    if (this.walls.bottomWall === true) {
       this.drawBottomWall(x, y, this.cellWidth, this.cellHeight);
-    if (this.walls.leftWall === true) this.drawLeftWall(x, y, this.cellHeight);
+    }
+
+    if (this.walls.leftWall === true) {
+      this.drawLeftWall(x, y, this.cellHeight);
+    }
 
     if (this.visited) {
       // ctx.fillRect(x, y, this.cellWidth, this.cellHeight);
@@ -187,87 +200,80 @@ class Cell {
   }
 
   findNeighbors() {
-    let topNeighbor;
-    let rightNeighbor;
-    let bottomNeighbor;
-    let leftNeighbor;
+    let topNeighbor = {}
+    let rightNeighbor = {}
+    let bottomNeighbor = {}
+    let leftNeighbor = {}
     let availableNeighbors = [];
 
     // Check if there is a neighbor in the grid or not, set position
-    // if (this.colNum > 0) {
     if (this.rowNum > 0) {
-      // topNeighbor = this.parentGrid[this.colNum - 1][this.rowNum];
-      topNeighbor = this.parentGrid[this.colNum][this.rowNum - 1];
+      topNeighbor.cell = this.parentGrid[this.rowNum - 1][this.colNum];
       topNeighbor.position = "top";
     }
 
-    if (this.colNum < this.parentGrid.length - 1) {
-      // if (this.rowNum < this.parentGrid[0].length - 1) {
-      // rightNeighbor = this.parentGrid[this.colNum][this.rowNum + 1];
-      rightNeighbor = this.parentGrid[this.colNum + 1][this.rowNum];
+    if (this.colNum < this.parentGrid[0].length - 1) {
+      rightNeighbor.cell = this.parentGrid[this.rowNum][this.colNum + 1];
       rightNeighbor.position = "right";
     }
 
-    // if (this.colNum < this.parentGrid.length - 1) {
-    if (this.rowNum < this.parentGrid[0].length - 1) {
-      // bottomNeighbor = this.parentGrid[this.colNum + 1][this.rowNum];
-      bottomNeighbor = this.parentGrid[this.colNum][this.rowNum + 1];
+    if (this.rowNum < this.parentGrid.length - 1) {
+      bottomNeighbor.cell = this.parentGrid[this.rowNum + 1][this.colNum];
       bottomNeighbor.position = "bottom";
     }
 
-    // if (this.rowNum > 0) {
     if (this.colNum > 0) {
-      // leftNeighbor = this.parentGrid[this.colNum][this.rowNum - 1];
-      leftNeighbor = this.parentGrid[this.colNum - 1][this.rowNum];
+      leftNeighbor.cell = this.parentGrid[this.rowNum][this.colNum - 1];
       leftNeighbor.position = "left";
     }
 
     // Check if the neighbors have been visited - if not, push them to currentNeighbors
-    if (topNeighbor && topNeighbor.visited === false)
+    if (topNeighbor.cell && topNeighbor.cell.visited === false)
       availableNeighbors.push(topNeighbor);
-    if (rightNeighbor && rightNeighbor.visited === false)
+    if (rightNeighbor.cell && rightNeighbor.cell.visited === false)
       availableNeighbors.push(rightNeighbor);
-    if (bottomNeighbor && bottomNeighbor.visited === false)
+    if (bottomNeighbor.cell && bottomNeighbor.cell.visited === false)
       availableNeighbors.push(bottomNeighbor);
-    if (leftNeighbor && leftNeighbor.visited === false)
+    if (leftNeighbor.cell && leftNeighbor.cell.visited === false)
       availableNeighbors.push(leftNeighbor);
 
     console.log("Current cell available neighbors -->");
     console.log(availableNeighbors);
-    return availableNeighbors;
+    this.neighbors = availableNeighbors;
   }
 
   chooseNeighbor() {
     // Pick a neighbor to visit at random
-    let unvisitedNeighbors = currentCell.findNeighbors();
-    let randomIndex = Math.floor(Math.random() * unvisitedNeighbors.length);
-    let randomNeighbor = unvisitedNeighbors[randomIndex];
-    randomNeighbor.fillGreen();
+    let randomIndex = Math.floor(Math.random() * this.neighbors.length);
+    let randomNeighbor = this.neighbors[randomIndex];
 
+    console.log("Random neighbor -->");
+    console.log(randomNeighbor);
     return randomNeighbor;
   }
 
   breakDownWalls(nextCell) {
-    if (this.position === "top") {
+    if (nextCell.position === "top") {
       this.walls.topWall = false;
-      nextCell.walls.bottomWall = false;
+      nextCell.cell.walls.bottomWall = false;
     }
-    if (this.position === "right") {
+    if (nextCell.position === "right") {
       this.walls.rightWall = false;
-      nextCell.walls.leftWall = false;
+      nextCell.cell.walls.leftWall = false;
     }
-    if (this.position === "bottom") {
+    if (nextCell.position === "bottom") {
       this.walls.bottomWall = false;
-      nextCell.walls.topWall = false;
+      nextCell.cell.walls.topWall = false;
     }
-    if (this.position === "left") {
+    if (nextCell.position === "left") {
       this.walls.leftWall = false;
-      nextCell.walls.rightWall = false;
+      nextCell.cell.walls.rightWall = false;
     }
   }
 }
 
 //* Create a maze
-let newMaze = new Maze(700, 400, 10, 20);
+let newMaze = new Maze(700, 400, 10, 15);
 newMaze.createGrid();
 console.log(newMaze);
+newMaze.buildPathFrom();
