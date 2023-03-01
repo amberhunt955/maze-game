@@ -43,15 +43,11 @@ class Maze {
       this.grid.push(row);
       y += this.cellHeight;
     }
-
-    console.log(x);
-    console.log(y);
   }
 
   buildPathFrom(cell = this.grid[0][0]) {
     currentCell = cell;
-    console.log("Current cell -->");
-    console.log(currentCell);
+  
     //? If the cell has not been visited, mark cell as visited and find its unvisited neighbors
     while (currentCell.visited === false) {
       currentCell.visited = true;
@@ -61,23 +57,13 @@ class Maze {
       if (currentCell.neighbors.length !== 0) {
         let nextCell = currentCell.chooseNeighbor();
         nextCell.cell.previousCell = currentCell;
-        console.log(`Going to next cell printed below`);
-        console.log(nextCell);
         currentCell.breakDownWalls(nextCell);
         // currentCell.showCell();
         // nextCell.cell.showCell();
-        console.log("Current cell -->");
-        console.log(currentCell);
-        console.log("Next cell -->");
-        console.log(nextCell);
-        console.log("----------------");
         this.buildPathFrom(nextCell.cell);
         // If there are not unvisited neighbors, go back to previous cell
       } else {
         previousCell = currentCell.previousCell;
-        console.log(`Need to backtrack to previous cell`);
-        console.log("----------------");
-        console.log(previousCell);
         this.buildPathFrom(previousCell);
       }
     }
@@ -90,23 +76,13 @@ class Maze {
       if (currentCell.neighbors.length !== 0) {
         let nextCell = currentCell.chooseNeighbor();
         nextCell.cell.previousCell = currentCell;
-        console.log(`Going to next cell printed below`);
-        console.log(nextCell);
         currentCell.breakDownWalls(nextCell);
         // currentCell.showCell();
         // nextCell.cell.showCell();
-        console.log("Current cell -->");
-        console.log(currentCell);
-        console.log("Next cell -->");
-        console.log(nextCell);
-        console.log("----------------");
         this.buildPathFrom(nextCell.cell);
         // If there are not unvisited neighbors, go back to previous cell
       } else {
         previousCell = currentCell.previousCell;
-        console.log(`Need to backtrack to previous cell`);
-        console.log("----------------");
-        console.log(previousCell);
         this.buildPathFrom(previousCell);
       }
     }
@@ -245,8 +221,6 @@ class Cell {
     if (leftNeighbor.cell && leftNeighbor.cell.visited === false)
       availableNeighbors.push(leftNeighbor);
 
-    console.log("Current cell available neighbors -->");
-    console.log(availableNeighbors);
     this.neighbors = availableNeighbors;
   }
 
@@ -255,8 +229,6 @@ class Cell {
     let randomIndex = Math.floor(Math.random() * this.neighbors.length);
     let randomNeighbor = this.neighbors[randomIndex];
 
-    console.log("Random neighbor -->");
-    console.log(randomNeighbor);
     return randomNeighbor;
   }
 
@@ -281,7 +253,7 @@ class Cell {
 }
 
 //* Create a maze
-let newMaze = new Maze(700, 400, 10, 15);
+let newMaze = new Maze(700, 400, 20, 25);
 newMaze.createGrid();
 console.log(newMaze);
 newMaze.buildPathFrom();
