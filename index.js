@@ -64,7 +64,7 @@ class Maze {
         console.log(`Going to next cell printed below`);
         console.log(nextCell);
         currentCell.breakDownWalls(nextCell);
-        currentCell.showCell();
+        // currentCell.showCell();
         // nextCell.cell.showCell();
         console.log("Current cell -->");
         console.log(currentCell);
@@ -93,7 +93,7 @@ class Maze {
         console.log(`Going to next cell printed below`);
         console.log(nextCell);
         currentCell.breakDownWalls(nextCell);
-        currentCell.showCell();
+        // currentCell.showCell();
         // nextCell.cell.showCell();
         console.log("Current cell -->");
         console.log(currentCell);
@@ -108,6 +108,14 @@ class Maze {
         console.log("----------------");
         console.log(previousCell);
         this.buildPathFrom(previousCell);
+      }
+    }
+  }
+
+  printMaze() {
+    for (let i = 0; i < this.grid.length; i++) {
+      for (let j = 0; j < this.grid[i].length; j++) {
+        this.grid[i][j].showCell();
       }
     }
   }
@@ -277,3 +285,4 @@ let newMaze = new Maze(700, 400, 10, 15);
 newMaze.createGrid();
 console.log(newMaze);
 newMaze.buildPathFrom();
+newMaze.printMaze();
