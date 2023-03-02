@@ -28,13 +28,7 @@ class Maze {
       let row = [];
 
       for (let j = 0; j < this.numOfCols; j++) {
-        let cell = new Cell(
-          i,
-          j,
-          this.cellWidth,
-          this.cellHeight,
-          this.grid
-        );
+        let cell = new Cell(i, j, this.cellWidth, this.cellHeight, this.grid);
         // cell.showCell();
         row.push(cell);
         x += this.cellWidth;
@@ -47,7 +41,7 @@ class Maze {
 
   buildPathFrom(cell = this.grid[0][0]) {
     currentCell = cell;
-  
+
     //? If the cell has not been visited, mark cell as visited and find its unvisited neighbors
     while (currentCell.visited === false) {
       currentCell.visited = true;
@@ -89,7 +83,9 @@ class Maze {
 
     // set entry and exit
     this.grid[0][0].walls.leftWall = false;
-    this.grid[this.grid.length - 1][this.grid[0].length - 1].walls.rightWall = false;
+    this.grid[this.grid.length - 1][
+      this.grid[0].length - 1
+    ].walls.rightWall = false;
   }
 
   printMaze() {
@@ -188,10 +184,10 @@ class Cell {
   }
 
   findNeighbors() {
-    let topNeighbor = {}
-    let rightNeighbor = {}
-    let bottomNeighbor = {}
-    let leftNeighbor = {}
+    let topNeighbor = {};
+    let rightNeighbor = {};
+    let bottomNeighbor = {};
+    let leftNeighbor = {};
     let availableNeighbors = [];
 
     // Check if there is a neighbor in the grid or not, set position
@@ -268,9 +264,10 @@ newMaze.printMaze();
 //* Create the Player class
 class Player {
   constructor(x, y, hostMaze) {
-    this.x = x + hostMaze.cellWidth/2;
-    this.y = y + hostMaze.cellHeight/2;
-    this.radius = (hostMaze.cellWidth + hostMaze.cellHeight) / 10
+    // X and Y are representing the center of the circle
+    this.x = x + hostMaze.cellWidth / 2;
+    this.y = y + hostMaze.cellHeight / 2;
+    this.radius = (hostMaze.cellWidth + hostMaze.cellHeight) / 10;
     this.hostMaze = hostMaze;
     this.rowNum = Math.floor(this.x / hostMaze.cellWidth);
     this.colNum = Math.floor(this.y / hostMaze.cellHeight);
@@ -280,9 +277,19 @@ class Player {
     ctx.strokeStyle = "blue";
     ctx.fillStyle = "blue";
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI)
+    ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
     ctx.stroke();
     ctx.fill();
+  }
+
+  update() {
+    ctx.clearRect(
+      (this.colNum + 0.5) * (this.hostMaze.cellWidth) - this.radius - 2,
+      (this.rowNum + 0.5) * (this.hostMaze.cellHeight) - this.radius - 2,
+      this.radius * 2 + 4,
+      this.radius * 2 + 4
+    );
+    this.drawPlayer();
   }
 }
 
@@ -292,21 +299,36 @@ console.log(user);
 user.drawPlayer();
 
 //* Controls
-addEventListener("keydown", function(event) {
+addEventListener("keydown", function (event) {
   if (event.code === "ArrowUp") {
     console.log("Up arrow pressed");
+    user.y -= user.hostMaze.cellHeight;
+    user.update();
+    user.rowNum--;
+    console.log(user);
   }
 
   if (event.code === "ArrowRight") {
     console.log("Right arrow pressed");
+    user.x += user.hostMaze.cellWidth;
+    user.update();
+    user.colNum++;
+    console.log(user);
   }
 
   if (event.code === "ArrowDown") {
     console.log("Down arrow pressed");
+    user.y += user.hostMaze.cellHeight;
+    user.update();
+    user.rowNum++;
+    console.log(user);
   }
 
   if (event.code === "ArrowLeft") {
     console.log("Left arrow pressed");
+    user.x -= user.hostMaze.cellWidth;
+    user.update();
+    user.colNum--;
+    console.log(user);
   }
-
-})
+});
