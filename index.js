@@ -1,6 +1,6 @@
 //* Grab the canvas and get context
 const canvas = document.getElementById("canvas");
-canvas.style.backgroundColor = "grey";
+canvas.style.backgroundColor = "#9DC08B";
 const ctx = canvas.getContext("2d");
 
 //* Declare currentCell and previousCell variables
@@ -86,6 +86,10 @@ class Maze {
         this.buildPathFrom(previousCell);
       }
     }
+
+    // set entry and exit
+    this.grid[0][0].walls.leftWall = false;
+    this.grid[this.grid.length - 1][this.grid[0].length - 1].walls.rightWall = false;
   }
 
   printMaze() {
@@ -258,3 +262,51 @@ newMaze.createGrid();
 console.log(newMaze);
 newMaze.buildPathFrom();
 newMaze.printMaze();
+
+//& -----------------------------
+
+//* Create the Player class
+class Player {
+  constructor(x, y, hostMaze) {
+    this.x = x + hostMaze.cellWidth/2;
+    this.y = y + hostMaze.cellHeight/2;
+    this.radius = (hostMaze.cellWidth + hostMaze.cellHeight) / 10
+    this.hostMaze = hostMaze;
+    this.rowNum = Math.floor(this.x / hostMaze.cellWidth);
+    this.colNum = Math.floor(this.y / hostMaze.cellHeight);
+  }
+
+  drawPlayer() {
+    ctx.strokeStyle = "blue";
+    ctx.fillStyle = "blue";
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, 2*Math.PI)
+    ctx.stroke();
+    ctx.fill();
+  }
+}
+
+//* Create a user
+const user = new Player(0, 0, newMaze);
+console.log(user);
+user.drawPlayer();
+
+//* Controls
+addEventListener("keydown", function(event) {
+  if (event.code === "ArrowUp") {
+    console.log("Up arrow pressed");
+  }
+
+  if (event.code === "ArrowRight") {
+    console.log("Right arrow pressed");
+  }
+
+  if (event.code === "ArrowDown") {
+    console.log("Down arrow pressed");
+  }
+
+  if (event.code === "ArrowLeft") {
+    console.log("Left arrow pressed");
+  }
+
+})

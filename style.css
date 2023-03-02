@@ -12,9 +12,11 @@ body {
 
 h1 {
     margin-top: 20px;
+    font-family: monospace;
+    text-transform: uppercase;
 }
 
 #canvas {
     margin-top: 20px;
-    border: solid black 2px;
+    border: none;
 }
