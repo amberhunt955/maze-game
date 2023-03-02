@@ -263,10 +263,12 @@ newMaze.printMaze();
 
 //* Create the Player class
 class Player {
-  constructor(x, y, hostMaze) {
+  constructor(rowNum, colNum, hostMaze) {
     // X and Y are representing the center of the circle
-    this.x = x + hostMaze.cellWidth / 2;
-    this.y = y + hostMaze.cellHeight / 2;
+    // this.x = x + hostMaze.cellWidth / 2;
+    this.x = (rowNum * hostMaze.cellWidth / 2) + (hostMaze.cellWidth / 2);
+    // this.y = y + hostMaze.cellHeight / 2;
+    this.y = (colNum * hostMaze.cellHeight / 2) + (hostMaze.cellHeight / 2);
     this.radius = (hostMaze.cellWidth + hostMaze.cellHeight) / 10;
     this.hostMaze = hostMaze;
     this.rowNum = Math.floor(this.x / hostMaze.cellWidth);
@@ -302,33 +304,42 @@ user.drawPlayer();
 addEventListener("keydown", function (event) {
   if (event.code === "ArrowUp") {
     console.log("Up arrow pressed");
-    user.y -= user.hostMaze.cellHeight;
-    user.update();
-    user.rowNum--;
+    while (user.hostMaze.grid[user.rowNum][user.colNum].walls.topWall === false) {
+      user.y -= user.hostMaze.cellHeight;
+      user.update();
+      user.rowNum--;
+    }
     console.log(user);
   }
 
   if (event.code === "ArrowRight") {
     console.log("Right arrow pressed");
-    user.x += user.hostMaze.cellWidth;
-    user.update();
-    user.colNum++;
+    while (user.hostMaze.grid[user.rowNum][user.colNum].walls.rightWall === false) {
+      console.log(user.hostMaze.grid);
+      user.x += user.hostMaze.cellWidth;
+      user.update();
+      user.colNum++;
+    }
     console.log(user);
   }
 
   if (event.code === "ArrowDown") {
     console.log("Down arrow pressed");
-    user.y += user.hostMaze.cellHeight;
-    user.update();
-    user.rowNum++;
+    while (user.hostMaze.grid[user.rowNum][user.colNum].walls.bottomWall === false) {
+      user.y += user.hostMaze.cellHeight;
+      user.update();
+      user.rowNum++;
+    }
     console.log(user);
   }
 
   if (event.code === "ArrowLeft") {
     console.log("Left arrow pressed");
-    user.x -= user.hostMaze.cellWidth;
-    user.update();
-    user.colNum--;
+    while (user.hostMaze.grid[user.rowNum][user.colNum].walls.leftWall === false) {
+      user.x -= user.hostMaze.cellWidth;
+      user.update();
+      user.colNum--;
+    }
     console.log(user);
   }
 });
