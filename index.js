@@ -81,11 +81,11 @@ class Maze {
       }
     }
 
-    // set entry and exit
-    this.grid[0][0].walls.leftWall = false;
-    this.grid[this.grid.length - 1][
-      this.grid[0].length - 1
-    ].walls.rightWall = false;
+    // // set entry and exit
+    // this.grid[0][0].walls.leftWall = false;
+    // this.grid[this.grid.length - 1][
+    //   this.grid[0].length - 1
+    // ].walls.rightWall = false;
   }
 
   printMaze() {
@@ -253,7 +253,7 @@ class Cell {
 }
 
 //* Create a maze
-let newMaze = new Maze(600, 450, 30, 30);
+let newMaze = new Maze(600, 450, 20, 20);
 newMaze.createGrid();
 console.log(newMaze);
 newMaze.buildPathFrom();
@@ -309,8 +309,9 @@ function update(player) {
       (player.rowNum + 0.5) * player.hostMaze.cellHeight - player.radius - 2,
       player.radius * 2 + 4,
       player.radius * 2 + 4
-    );
-    player.drawPlayer();
+      );
+      player.drawPlayer();
+      determineWinner();
 
     setTimeout(function() {
       requestAnimationFrame(function () {
@@ -385,7 +386,6 @@ function checkIfWall(player) {
 
 
 addEventListener("keydown", function (event) {
-  console.log(event.code);
   //* user1 keyboard controls
   if (event.code === "ArrowUp") {
     user1.wallInQuestion = user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.topWall;
@@ -481,6 +481,15 @@ addEventListener("keydown", function (event) {
 
 //& ---------------------------------------------------------
 
-if (user1.colNum === user1.hostMaze.grid[0].length) {
-  console.log("You win!");
+function determineWinner() {
+  if (user1.x === 585 && user1.y === 438.75) {
+    alert("Blue circle wins!");
+  }
+  
+  if (user2.x === 15 && user2.y === 11.25) {
+    alert("Purple circle wins!");
+  }
 }
+
+
+
