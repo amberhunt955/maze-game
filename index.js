@@ -253,7 +253,7 @@ class Cell {
 }
 
 //* Create a maze
-let newMaze = new Maze(700, 400, 20, 25);
+let newMaze = new Maze(700, 400, 10, 10);
 newMaze.createGrid();
 console.log(newMaze);
 newMaze.buildPathFrom();
@@ -281,18 +281,19 @@ class Player {
     ctx.stroke();
     ctx.fill();
   }
-
 }
 
-//* Create a user
+//* Create user as an instance of the Player class
 const user = new Player(0, 0, newMaze);
 console.log(user);
 user.drawPlayer();
 
 //* Update functions
 
+let framesPerSecond = 5;
+
 function update(player) {
-  checkIfWall();
+  checkIfWall(player);
   if (player.wallInQuestion === false) {
     ctx.clearRect(
       (player.colNum + 0.5) * player.hostMaze.cellWidth - player.radius - 2,
@@ -302,77 +303,80 @@ function update(player) {
     );
     player.drawPlayer();
 
-    requestAnimationFrame(function () {
-      checkIfWall();
-      if (player.wallInQuestion === false) {
-        changePosition();
-        update(user);
-        changeRowOrCol();
-      }
-    });
+    setTimeout(function() {
+      requestAnimationFrame(function () {
+        checkIfWall(player);
+        if (player.wallInQuestion === false) {
+          changePosition(player);
+          update(user);
+          changeRowOrCol(player);
+        }
+      });
+    }, 1000 / framesPerSecond);
   }
 }
 
-function changePosition() {
+function changePosition(player) {
   if (key === "up") {
-    user.y -= user.hostMaze.cellHeight;
+    player.y -= player.hostMaze.cellHeight;
   }
 
   if (key === "right") {
-    user.x += user.hostMaze.cellWidth;
+    player.x += player.hostMaze.cellWidth;
   }
 
   if (key === "down") {
-    user.y += user.hostMaze.cellHeight;
+    player.y += player.hostMaze.cellHeight;
   }
 
   if (key === "left") {
-    user.x -= user.hostMaze.cellWidth;
+    player.x -= player.hostMaze.cellWidth;
   }
 }
 
-function changeRowOrCol() {
+function changeRowOrCol(player) {
   if (key === "up") {
-    user.rowNum--;
+    player.rowNum--;
   }
 
   if (key === "right") {
-    user.colNum++;
+    player.colNum++;
   }
 
   if (key === "down") {
-    user.rowNum++;
+    player.rowNum++;
   }
 
   if (key === "left") {
-    user.colNum--;
+    player.colNum--;
   }
 }
 
-function checkIfWall() {
+function checkIfWall(player) {
   if (key === "up") {
-    user.wallInQuestion =
-      user.hostMaze.grid[user.rowNum][user.colNum].walls.topWall;
+    player.wallInQuestion =
+      player.hostMaze.grid[player.rowNum][player.colNum].walls.topWall;
   }
 
   if (key === "right") {
-    user.wallInQuestion =
-      user.hostMaze.grid[user.rowNum][user.colNum].walls.rightWall;
+    player.wallInQuestion =
+      player.hostMaze.grid[player.rowNum][player.colNum].walls.rightWall;
   }
 
   if (key === "down") {
-    user.wallInQuestion =
-      user.hostMaze.grid[user.rowNum][user.colNum].walls.bottomWall;
+    player.wallInQuestion =
+      player.hostMaze.grid[player.rowNum][player.colNum].walls.bottomWall;
   }
 
   if (key === "left") {
-    user.wallInQuestion =
-      user.hostMaze.grid[user.rowNum][user.colNum].walls.leftWall;
+    player.wallInQuestion =
+      player.hostMaze.grid[player.rowNum][player.colNum].walls.leftWall;
   }
 }
 
 //* Key Controls
 let key;
+
 addEventListener("keydown", function (event) {
   if (event.code === "ArrowUp") {
     console.log("Up arrow pressed");
