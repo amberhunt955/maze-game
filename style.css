@@ -10,10 +10,13 @@ body {
     background-color: #9DC08B;
 }
 
-h1 {
+button {
     margin-top: 20px;
     font-family: monospace;
     text-transform: uppercase;
+    font-size: 20px;
+    padding: 20px;
+    border-radius: 20px;
 }
 
 #canvas {

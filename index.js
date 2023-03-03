@@ -6,6 +6,10 @@ const ctx = canvas.getContext("2d");
 //* Declare currentCell and previousCell variables
 let currentCell;
 let previousCell;
+let round = 0;
+
+function playGame() {
+round++;
 
 //* Create the Maze class
 class Maze {
@@ -483,13 +487,40 @@ addEventListener("keydown", function (event) {
 
 function determineWinner() {
   if (user1.x === 585 && user1.y === 438.75) {
-    alert("Blue circle wins!");
+    alert("Blue circle wins! Purple circle loses. If you would like to continue, press Play Again.");
+    startButton.textContent = "Play Again";
+    // Reset user1
+    user1.x = 0
+    user1.y = 0;
+    
+     // Reset user2
+     user2.x = 0;
+     user2.y = 0;
   }
   
   if (user2.x === 15 && user2.y === 11.25) {
-    alert("Purple circle wins!");
+    alert("Purple circle wins! Blue circle loses. If you would like to continue, press Play Again.");
+    startButton.textContent = "Play Again";
+    // Reset user1
+    user1.x = 0;
+    user1.y = 0;
+    
+     // Reset user2
+     user2.x = 0;
+     user2.y = 0;
+
   }
+
 }
+
+}
+
+//&-------------------------------------------------------
+
+const startButton = document.getElementById("start");
+startButton.addEventListener("click", function() {
+  playGame();
+});
 
 
 
