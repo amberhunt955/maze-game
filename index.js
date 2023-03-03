@@ -253,7 +253,7 @@ class Cell {
 }
 
 //* Create a maze
-let newMaze = new Maze(700, 400, 20, 25);
+let newMaze = new Maze(600, 450, 30, 30);
 newMaze.createGrid();
 console.log(newMaze);
 newMaze.buildPathFrom();
@@ -263,7 +263,7 @@ newMaze.printMaze();
 
 //* Create the Player class
 class Player {
-  constructor(rowNum, colNum, hostMaze) {
+  constructor(rowNum, colNum, hostMaze, color) {
     // X and Y are representing the center of the circle
     // this.x = (rowNum * hostMaze.cellWidth) / 2 + hostMaze.cellWidth / 2;
     this.x = (rowNum * hostMaze.cellWidth) + hostMaze.cellWidth / 2;
@@ -275,11 +275,12 @@ class Player {
     // this.colNum = Math.floor(this.y / hostMaze.cellHeight);
     this.rowNum = rowNum;
     this.colNum = colNum;
+    this.color = color;
   }
 
   drawPlayer() {
-    ctx.strokeStyle = "blue";
-    ctx.fillStyle = "blue";
+    ctx.strokeStyle = this.color;
+    ctx.fillStyle = this.color;
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
     ctx.stroke();
@@ -288,16 +289,17 @@ class Player {
 }
 
 //* Create user1 and user2 as instances of the Player class
-const user1 = new Player(0, 0, newMaze);
+const user1 = new Player(0, 0, newMaze, "blue");
 user1.drawPlayer();
 console.log(user1);
 
-const user2 = new Player (newMaze.grid[0].length - 1, newMaze.grid.length - 1, newMaze);
+const user2 = new Player (newMaze.grid.length - 1, newMaze.grid[0].length - 1, newMaze, "purple");
 user2.drawPlayer();
 console.log(user2);
 
 //* Update functions
-let framesPerSecond = 5;
+let framesPerSecond = 2;
+let key;
 
 function update(player) {
   checkIfWall(player);
@@ -381,10 +383,10 @@ function checkIfWall(player) {
   }
 }
 
-//* user1 keyboard controls
-let key;
 
 addEventListener("keydown", function (event) {
+  console.log(event.code);
+  //* user1 keyboard controls
   if (event.code === "ArrowUp") {
     user1.wallInQuestion = user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.topWall;
     key = "up";
@@ -428,7 +430,54 @@ addEventListener("keydown", function (event) {
       user1.colNum--;
     }
   }
+
+  //* user2 keyboard controls
+  if (event.code === "KeyW") {
+    user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.topWall;
+    key = "up";
+
+    if (user2.wallInQuestion === false) {
+      user2.y -= user2.hostMaze.cellHeight;
+      update(user2);
+      user2.rowNum--;
+    }
+  }
+
+  if (event.code === "KeyD") {
+    user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.rightWall;
+    key = "right";
+
+    if (user2.wallInQuestion === false) {
+      user2.x += user2.hostMaze.cellWidth;
+      update(user2);
+      user2.colNum++;
+    }
+  }
+
+  if (event.code === "KeyS") {
+    user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.bottomWall;
+    key = "down";
+
+    if (user2.wallInQuestion === false) {
+      user2.y += user2.hostMaze.cellHeight;
+      update(user2);
+      user2.rowNum++;
+    }
+  }
+
+  if (event.code === "KeyA") {
+    user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.leftWall;
+    key = "left";
+
+    if (user2.wallInQuestion === false) {
+      user2.x -= user2.hostMaze.cellWidth;
+      update(user2);
+      user2.colNum--;
+    }
+  }
+
 });
+
 
 //& ---------------------------------------------------------
 
