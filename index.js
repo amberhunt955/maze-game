@@ -259,16 +259,14 @@ console.log(newMaze);
 newMaze.buildPathFrom();
 newMaze.printMaze();
 
-//& -----------------------------
+//& --------------------------------------
 
 //* Create the Player class
 class Player {
   constructor(rowNum, colNum, hostMaze) {
     // X and Y are representing the center of the circle
-    // this.x = x + hostMaze.cellWidth / 2;
-    this.x = (rowNum * hostMaze.cellWidth / 2) + (hostMaze.cellWidth / 2);
-    // this.y = y + hostMaze.cellHeight / 2;
-    this.y = (colNum * hostMaze.cellHeight / 2) + (hostMaze.cellHeight / 2);
+    this.x = (rowNum * hostMaze.cellWidth) / 2 + hostMaze.cellWidth / 2;
+    this.y = (colNum * hostMaze.cellHeight) / 2 + hostMaze.cellHeight / 2;
     this.radius = (hostMaze.cellWidth + hostMaze.cellHeight) / 10;
     this.hostMaze = hostMaze;
     this.rowNum = Math.floor(this.x / hostMaze.cellWidth);
@@ -284,15 +282,6 @@ class Player {
     ctx.fill();
   }
 
-  update() {
-    ctx.clearRect(
-      (this.colNum + 0.5) * (this.hostMaze.cellWidth) - this.radius - 2,
-      (this.rowNum + 0.5) * (this.hostMaze.cellHeight) - this.radius - 2,
-      this.radius * 2 + 4,
-      this.radius * 2 + 4
-    );
-    this.drawPlayer();
-  }
 }
 
 //* Create a user
@@ -300,46 +289,140 @@ const user = new Player(0, 0, newMaze);
 console.log(user);
 user.drawPlayer();
 
-//* Controls
+//* Update functions
+
+function update(player) {
+  checkIfWall();
+  if (player.wallInQuestion === false) {
+    ctx.clearRect(
+      (player.colNum + 0.5) * player.hostMaze.cellWidth - player.radius - 2,
+      (player.rowNum + 0.5) * player.hostMaze.cellHeight - player.radius - 2,
+      player.radius * 2 + 4,
+      player.radius * 2 + 4
+    );
+    player.drawPlayer();
+
+    requestAnimationFrame(function () {
+      checkIfWall();
+      if (player.wallInQuestion === false) {
+        changePosition();
+        update(user);
+        changeRowOrCol();
+      }
+    });
+  }
+}
+
+function changePosition() {
+  if (key === "up") {
+    user.y -= user.hostMaze.cellHeight;
+  }
+
+  if (key === "right") {
+    user.x += user.hostMaze.cellWidth;
+  }
+
+  if (key === "down") {
+    user.y += user.hostMaze.cellHeight;
+  }
+
+  if (key === "left") {
+    user.x -= user.hostMaze.cellWidth;
+  }
+}
+
+function changeRowOrCol() {
+  if (key === "up") {
+    user.rowNum--;
+  }
+
+  if (key === "right") {
+    user.colNum++;
+  }
+
+  if (key === "down") {
+    user.rowNum++;
+  }
+
+  if (key === "left") {
+    user.colNum--;
+  }
+}
+
+function checkIfWall() {
+  if (key === "up") {
+    user.wallInQuestion =
+      user.hostMaze.grid[user.rowNum][user.colNum].walls.topWall;
+  }
+
+  if (key === "right") {
+    user.wallInQuestion =
+      user.hostMaze.grid[user.rowNum][user.colNum].walls.rightWall;
+  }
+
+  if (key === "down") {
+    user.wallInQuestion =
+      user.hostMaze.grid[user.rowNum][user.colNum].walls.bottomWall;
+  }
+
+  if (key === "left") {
+    user.wallInQuestion =
+      user.hostMaze.grid[user.rowNum][user.colNum].walls.leftWall;
+  }
+}
+
+//* Key Controls
+let key;
 addEventListener("keydown", function (event) {
   if (event.code === "ArrowUp") {
     console.log("Up arrow pressed");
-    while (user.hostMaze.grid[user.rowNum][user.colNum].walls.topWall === false) {
+    user.wallInQuestion =
+      user.hostMaze.grid[user.rowNum][user.colNum].walls.topWall;
+    key = "up";
+
+    if (user.wallInQuestion === false) {
       user.y -= user.hostMaze.cellHeight;
-      user.update();
+      update(user);
       user.rowNum--;
     }
-    console.log(user);
   }
 
   if (event.code === "ArrowRight") {
     console.log("Right arrow pressed");
-    while (user.hostMaze.grid[user.rowNum][user.colNum].walls.rightWall === false) {
-      console.log(user.hostMaze.grid);
+    user.wallInQuestion =
+      user.hostMaze.grid[user.rowNum][user.colNum].walls.rightWall;
+    key = "right";
+
+    if (user.wallInQuestion === false) {
       user.x += user.hostMaze.cellWidth;
-      user.update();
+      update(user);
       user.colNum++;
     }
-    console.log(user);
   }
 
   if (event.code === "ArrowDown") {
     console.log("Down arrow pressed");
-    while (user.hostMaze.grid[user.rowNum][user.colNum].walls.bottomWall === false) {
+    user.wallInQuestion =
+      user.hostMaze.grid[user.rowNum][user.colNum].walls.bottomWall;
+    key = "down";
+
+    if (user.wallInQuestion === false) {
       user.y += user.hostMaze.cellHeight;
-      user.update();
+      update(user);
       user.rowNum++;
     }
-    console.log(user);
   }
 
   if (event.code === "ArrowLeft") {
     console.log("Left arrow pressed");
-    while (user.hostMaze.grid[user.rowNum][user.colNum].walls.leftWall === false) {
+    user.wallInQuestion =
+      user.hostMaze.grid[user.rowNum][user.colNum].walls.leftWall;
+    key = "left";
+
+    if (user.wallInQuestion === false) {
       user.x -= user.hostMaze.cellWidth;
-      user.update();
+      update(user);
       user.colNum--;
     }
-    console.log(user);
   }
 });
