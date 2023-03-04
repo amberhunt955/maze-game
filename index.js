@@ -2,14 +2,17 @@
 const canvas = document.getElementById("canvas");
 canvas.style.backgroundColor = "#9DC08B";
 const ctx = canvas.getContext("2d");
+canvas.style.display = "none";
+
+//* Get game text
+const gameText = document.getElementById("game-text");
+gameText.textContent =
+  "This is a two player game. Move the blue circle with the arrow keys. Move the purple circle with the AWDS keys. The goal of the blue circle is to get to the bottom right corner. The goal of the purple circle is to get to the top left corner. Whomever achieves their  goal first, wins!";
 
 //* Declare currentCell and previousCell variables
 let currentCell;
 let previousCell;
 let round = 0;
-
-function playGame() {
-round++;
 
 //* Create the Maze class
 class Maze {
@@ -25,15 +28,13 @@ class Maze {
     canvas.height = height;
   }
 
-  createGrid(rowNum = 0, colNum = 0, x = 0, y = 0) {
+  createGrid(x = 0, y = 0) {
     for (let i = 0; i < this.numOfRows; i++) {
-      // while (colNum !== this.mazeHeight) {
       x = 0;
       let row = [];
 
       for (let j = 0; j < this.numOfCols; j++) {
         let cell = new Cell(i, j, this.cellWidth, this.cellHeight, this.grid);
-        // cell.showCell();
         row.push(cell);
         x += this.cellWidth;
       }
@@ -46,18 +47,15 @@ class Maze {
   buildPathFrom(cell = this.grid[0][0]) {
     currentCell = cell;
 
-    //? If the cell has not been visited, mark cell as visited and find its unvisited neighbors
+    //! If the cell has not been visited, mark cell as visited and find its unvisited neighbors
     while (currentCell.visited === false) {
       currentCell.visited = true;
       currentCell.findNeighbors();
-
       // If there are unvisited neighbors, pick one and build path from there
       if (currentCell.neighbors.length !== 0) {
         let nextCell = currentCell.chooseNeighbor();
         nextCell.cell.previousCell = currentCell;
         currentCell.breakDownWalls(nextCell);
-        // currentCell.showCell();
-        // nextCell.cell.showCell();
         this.buildPathFrom(nextCell.cell);
         // If there are not unvisited neighbors, go back to previous cell
       } else {
@@ -69,14 +67,11 @@ class Maze {
     //! If the cell has been visited, check for unvisited neighbors
     while (currentCell !== this.grid[0][0]) {
       currentCell.findNeighbors();
-
       // If there are unvisited neighbors, build path from there
       if (currentCell.neighbors.length !== 0) {
         let nextCell = currentCell.chooseNeighbor();
         nextCell.cell.previousCell = currentCell;
         currentCell.breakDownWalls(nextCell);
-        // currentCell.showCell();
-        // nextCell.cell.showCell();
         this.buildPathFrom(nextCell.cell);
         // If there are not unvisited neighbors, go back to previous cell
       } else {
@@ -85,7 +80,8 @@ class Maze {
       }
     }
 
-    // // set entry and exit
+    //! Set entry and exit
+    // (Leaving this out for now as I had trouble with win/lose state)
     // this.grid[0][0].walls.leftWall = false;
     // this.grid[this.grid.length - 1][
     //   this.grid[0].length - 1
@@ -104,13 +100,13 @@ class Maze {
 //* Create the Cell class
 class Cell {
   constructor(rowNum, colNum, cellWidth, cellHeight, parentGrid) {
+    this.parentGrid = parentGrid;
     this.visited = false;
     // Structure
     this.rowNum = rowNum;
     this.colNum = colNum;
     this.cellWidth = cellWidth;
     this.cellHeight = cellHeight;
-    this.parentGrid = parentGrid;
     this.walls = {
       topWall: true,
       rightWall: true,
@@ -156,35 +152,20 @@ class Cell {
 
     ctx.strokeStyle = "black";
     ctx.lineWidth = 3;
-    ctx.fillStyle = "purple";
 
+    // If a wall exists - draw it
     if (this.walls.topWall === true) {
       this.drawTopWall(x, y, this.cellWidth);
     }
-
     if (this.walls.rightWall === true) {
       this.drawRightWall(x, y, this.cellWidth, this.cellHeight);
     }
-
     if (this.walls.bottomWall === true) {
       this.drawBottomWall(x, y, this.cellWidth, this.cellHeight);
     }
-
     if (this.walls.leftWall === true) {
       this.drawLeftWall(x, y, this.cellHeight);
     }
-
-    if (this.visited) {
-      // ctx.fillRect(x, y, this.cellWidth, this.cellHeight);
-    }
-  }
-
-  // Have this function for now so I personally can see what is going on with any specific cell
-  fillGreen() {
-    let x = this.rowNum * this.cellWidth;
-    let y = this.colNum * this.cellHeight;
-    ctx.fillStyle = "lightgrey";
-    ctx.fillRect(x + 1, y + 1, this.cellWidth - 2, this.cellHeight - 2);
   }
 
   findNeighbors() {
@@ -194,7 +175,7 @@ class Cell {
     let leftNeighbor = {};
     let availableNeighbors = [];
 
-    // Check if there is a neighbor in the grid or not, set position
+    // Check if there is a neighbor in the grid or not; if so - set neighbor position
     if (this.rowNum > 0) {
       topNeighbor.cell = this.parentGrid[this.rowNum - 1][this.colNum];
       topNeighbor.position = "top";
@@ -215,16 +196,21 @@ class Cell {
       leftNeighbor.position = "left";
     }
 
-    // Check if the neighbors have been visited - if not, push them to currentNeighbors
-    if (topNeighbor.cell && topNeighbor.cell.visited === false)
+    // Check if the neighbors have been visited - if not, push them to availableNeighbors
+    if (topNeighbor.cell && topNeighbor.cell.visited === false) {
       availableNeighbors.push(topNeighbor);
-    if (rightNeighbor.cell && rightNeighbor.cell.visited === false)
+    }
+    if (rightNeighbor.cell && rightNeighbor.cell.visited === false) {
       availableNeighbors.push(rightNeighbor);
-    if (bottomNeighbor.cell && bottomNeighbor.cell.visited === false)
+    }
+    if (bottomNeighbor.cell && bottomNeighbor.cell.visited === false) {
       availableNeighbors.push(bottomNeighbor);
-    if (leftNeighbor.cell && leftNeighbor.cell.visited === false)
+    }
+    if (leftNeighbor.cell && leftNeighbor.cell.visited === false) {
       availableNeighbors.push(leftNeighbor);
+    }
 
+    // Assign the availableNeighbors array as a property of the cell to whom they are neighbors
     this.neighbors = availableNeighbors;
   }
 
@@ -237,6 +223,8 @@ class Cell {
   }
 
   breakDownWalls(nextCell) {
+    // Choose which walls won't be printed based on
+    // the direction of the path in the maze
     if (nextCell.position === "top") {
       this.walls.topWall = false;
       nextCell.cell.walls.bottomWall = false;
@@ -256,33 +244,22 @@ class Cell {
   }
 }
 
-//* Create a maze
-let newMaze = new Maze(600, 450, 20, 20);
-newMaze.createGrid();
-console.log(newMaze);
-newMaze.buildPathFrom();
-newMaze.printMaze();
-
-//& --------------------------------------
-
 //* Create the Player class
 class Player {
   constructor(rowNum, colNum, hostMaze, color) {
-    // X and Y are representing the center of the circle
-    // this.x = (rowNum * hostMaze.cellWidth) / 2 + hostMaze.cellWidth / 2;
-    this.x = (rowNum * hostMaze.cellWidth) + hostMaze.cellWidth / 2;
-    // this.y = (colNum * hostMaze.cellHeight) / 2 + hostMaze.cellHeight / 2;
-    this.y = (colNum * hostMaze.cellHeight) + hostMaze.cellHeight / 2;
-    this.radius = (hostMaze.cellWidth + hostMaze.cellHeight) / 10;
     this.hostMaze = hostMaze;
-    // this.rowNum = Math.floor(this.x / hostMaze.cellWidth);
-    // this.colNum = Math.floor(this.y / hostMaze.cellHeight);
+    // Positioning the player. X and Y are representing the center of the circle.
     this.rowNum = rowNum;
     this.colNum = colNum;
+    this.x = rowNum * hostMaze.cellWidth + hostMaze.cellWidth / 2;
+    this.y = colNum * hostMaze.cellHeight + hostMaze.cellHeight / 2;
+    // Size and color
+    this.radius = (hostMaze.cellWidth + hostMaze.cellHeight) / 10;
     this.color = color;
   }
 
   drawPlayer() {
+    // Players are circles
     ctx.strokeStyle = this.color;
     ctx.fillStyle = this.color;
     ctx.beginPath();
@@ -292,235 +269,257 @@ class Player {
   }
 }
 
-//* Create user1 and user2 as instances of the Player class
-const user1 = new Player(0, 0, newMaze, "blue");
-user1.drawPlayer();
-console.log(user1);
+//* Create the playGame function
+function playGame() {
+  canvas.style.display = "block";
+  round++;
+  console.log(`Round ${round} -->`);
 
-const user2 = new Player (newMaze.grid.length - 1, newMaze.grid[0].length - 1, newMaze, "purple");
-user2.drawPlayer();
-console.log(user2);
+  //! Updating player position
+  let framesPerSecond = 5;
+  let key;
 
-//* Update functions
-let framesPerSecond = 2;
-let key;
-
-function update(player) {
-  checkIfWall(player);
-  if (player.wallInQuestion === false) {
-    ctx.clearRect(
-      (player.colNum + 0.5) * player.hostMaze.cellWidth - player.radius - 2,
-      (player.rowNum + 0.5) * player.hostMaze.cellHeight - player.radius - 2,
-      player.radius * 2 + 4,
-      player.radius * 2 + 4
+  function update(player) {
+    checkIfWall(player);
+    if (player.wallInQuestion === false) {
+      ctx.clearRect(
+        (player.colNum + 0.5) * player.hostMaze.cellWidth - player.radius - 2,
+        (player.rowNum + 0.5) * player.hostMaze.cellHeight - player.radius - 2,
+        player.radius * 2 + 4,
+        player.radius * 2 + 4
       );
       player.drawPlayer();
       determineWinner();
 
-    setTimeout(function() {
-      requestAnimationFrame(function () {
-        checkIfWall(player);
-        if (player.wallInQuestion === false) {
-          changePosition(player);
-          update(player);
-          changeRowOrCol(player);
-        }
-      });
-    }, 1000 / framesPerSecond);
+      setTimeout(function () {
+        requestAnimationFrame(function () {
+          checkIfWall(player);
+          if (player.wallInQuestion === false) {
+            changePosition(player);
+            update(player);
+            changeRowOrCol(player);
+          }
+        });
+      }, 1000 / framesPerSecond);
+    }
+  }
+
+  function changePosition(player) {
+    if (key === "up") {
+      player.y -= player.hostMaze.cellHeight;
+    }
+
+    if (key === "right") {
+      player.x += player.hostMaze.cellWidth;
+    }
+
+    if (key === "down") {
+      player.y += player.hostMaze.cellHeight;
+    }
+
+    if (key === "left") {
+      player.x -= player.hostMaze.cellWidth;
+    }
+  }
+
+  function changeRowOrCol(player) {
+    if (key === "up") {
+      player.rowNum--;
+    }
+
+    if (key === "right") {
+      player.colNum++;
+    }
+
+    if (key === "down") {
+      player.rowNum++;
+    }
+
+    if (key === "left") {
+      player.colNum--;
+    }
+  }
+
+  function checkIfWall(player) {
+    if (key === "up") {
+      player.wallInQuestion =
+        player.hostMaze.grid[player.rowNum][player.colNum].walls.topWall;
+    }
+
+    if (key === "right" && player.colNum < player.hostMaze.grid[0].length) {
+      player.wallInQuestion =
+        player.hostMaze.grid[player.rowNum][player.colNum].walls.rightWall;
+    }
+
+    if (key === "down") {
+      player.wallInQuestion =
+        player.hostMaze.grid[player.rowNum][player.colNum].walls.bottomWall;
+    }
+
+    if (key === "left") {
+      player.wallInQuestion =
+        player.hostMaze.grid[player.rowNum][player.colNum].walls.leftWall;
+    }
+  }
+
+  //! Keyboard controls
+  addEventListener("keydown", function (event) {
+    //& user1 controls
+    if (event.code === "ArrowUp") {
+      user1.wallInQuestion =
+        user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.topWall;
+      key = "up";
+
+      if (user1.wallInQuestion === false) {
+        user1.y -= user1.hostMaze.cellHeight;
+        update(user1);
+        user1.rowNum--;
+      }
+    }
+
+    if (event.code === "ArrowRight") {
+      user1.wallInQuestion =
+        user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.rightWall;
+      key = "right";
+
+      if (user1.wallInQuestion === false) {
+        user1.x += user1.hostMaze.cellWidth;
+        update(user1);
+        user1.colNum++;
+      }
+    }
+
+    if (event.code === "ArrowDown") {
+      user1.wallInQuestion =
+        user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.bottomWall;
+      key = "down";
+
+      if (user1.wallInQuestion === false) {
+        user1.y += user1.hostMaze.cellHeight;
+        update(user1);
+        user1.rowNum++;
+      }
+    }
+
+    if (event.code === "ArrowLeft") {
+      user1.wallInQuestion =
+        user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.leftWall;
+      key = "left";
+
+      if (user1.wallInQuestion === false) {
+        user1.x -= user1.hostMaze.cellWidth;
+        update(user1);
+        user1.colNum--;
+      }
+    }
+
+    //& user2 controls
+    if (event.code === "KeyW") {
+      user2.wallInQuestion =
+        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.topWall;
+      key = "up";
+
+      if (user2.wallInQuestion === false) {
+        user2.y -= user2.hostMaze.cellHeight;
+        update(user2);
+        user2.rowNum--;
+      }
+    }
+
+    if (event.code === "KeyD") {
+      user2.wallInQuestion =
+        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.rightWall;
+      key = "right";
+
+      if (user2.wallInQuestion === false) {
+        user2.x += user2.hostMaze.cellWidth;
+        update(user2);
+        user2.colNum++;
+      }
+    }
+
+    if (event.code === "KeyS") {
+      user2.wallInQuestion =
+        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.bottomWall;
+      key = "down";
+
+      if (user2.wallInQuestion === false) {
+        user2.y += user2.hostMaze.cellHeight;
+        update(user2);
+        user2.rowNum++;
+      }
+    }
+
+    if (event.code === "KeyA") {
+      user2.wallInQuestion =
+        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.leftWall;
+      key = "left";
+
+      if (user2.wallInQuestion === false) {
+        user2.x -= user2.hostMaze.cellWidth;
+        update(user2);
+        user2.colNum--;
+      }
+    }
+  });
+
+  //! End game
+  function determineWinner() {
+    if (user1.x === 585 && user1.y === 438.75) {
+      alert(
+        `Round ${round} results: Blue circle wins! Purple circle loses. If you would like to continue, press Play Again.`
+      );
+      console.log("Blue circle wins.");
+      startButton.textContent = "Play Again";
+    }
+
+    if (user2.x === 15 && user2.y === 11.25) {
+      alert(
+        `Round ${round} results: Purple circle wins! Blue circle loses. If you would like to continue, press Play Again.`
+      );
+      console.log("Purple circle wins.");
+      startButton.textContent = "Play Again";
+    }
   }
 }
 
-function changePosition(player) {
-  if (key === "up") {
-    player.y -= player.hostMaze.cellHeight;
-  }
+//* Reset function
+function reset() {
+  user1.rowNum = 0;
+  user1.colNum = 0;
+  user1.x = 15;
+  user1.y = 11.25;
+  user1.drawPlayer();
 
-  if (key === "right") {
-    player.x += player.hostMaze.cellWidth;
-  }
-
-  if (key === "down") {
-    player.y += player.hostMaze.cellHeight;
-  }
-
-  if (key === "left") {
-    player.x -= player.hostMaze.cellWidth;
-  }
-}
-
-function changeRowOrCol(player) {
-  if (key === "up") {
-    player.rowNum--;
-  }
-
-  if (key === "right") {
-    player.colNum++;
-  }
-
-  if (key === "down") {
-    player.rowNum++;
-  }
-
-  if (key === "left") {
-    player.colNum--;
-  }
-}
-
-function checkIfWall(player) {
-  if (key === "up") {
-    player.wallInQuestion =
-      player.hostMaze.grid[player.rowNum][player.colNum].walls.topWall;
-  }
-
-  if (key === "right" && player.colNum < player.hostMaze.grid[0].length) {
-    player.wallInQuestion =
-      player.hostMaze.grid[player.rowNum][player.colNum].walls.rightWall;
-  }
-
-  if (key === "down") {
-    player.wallInQuestion =
-      player.hostMaze.grid[player.rowNum][player.colNum].walls.bottomWall;
-  }
-
-  if (key === "left") {
-    player.wallInQuestion =
-      player.hostMaze.grid[player.rowNum][player.colNum].walls.leftWall;
-  }
-}
-
-
-addEventListener("keydown", function (event) {
-  //* user1 keyboard controls
-  if (event.code === "ArrowUp") {
-    user1.wallInQuestion = user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.topWall;
-    key = "up";
-
-    if (user1.wallInQuestion === false) {
-      user1.y -= user1.hostMaze.cellHeight;
-      update(user1);
-      user1.rowNum--;
-    }
-  }
-
-  if (event.code === "ArrowRight") {
-    user1.wallInQuestion = user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.rightWall;
-    key = "right";
-
-    if (user1.wallInQuestion === false) {
-      user1.x += user1.hostMaze.cellWidth;
-      update(user1);
-      user1.colNum++;
-    }
-  }
-
-  if (event.code === "ArrowDown") {
-    user1.wallInQuestion = user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.bottomWall;
-    key = "down";
-
-    if (user1.wallInQuestion === false) {
-      user1.y += user1.hostMaze.cellHeight;
-      update(user1);
-      user1.rowNum++;
-    }
-  }
-
-  if (event.code === "ArrowLeft") {
-    user1.wallInQuestion = user1.hostMaze.grid[user1.rowNum][user1.colNum].walls.leftWall;
-    key = "left";
-
-    if (user1.wallInQuestion === false) {
-      user1.x -= user1.hostMaze.cellWidth;
-      update(user1);
-      user1.colNum--;
-    }
-  }
-
-  //* user2 keyboard controls
-  if (event.code === "KeyW") {
-    user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.topWall;
-    key = "up";
-
-    if (user2.wallInQuestion === false) {
-      user2.y -= user2.hostMaze.cellHeight;
-      update(user2);
-      user2.rowNum--;
-    }
-  }
-
-  if (event.code === "KeyD") {
-    user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.rightWall;
-    key = "right";
-
-    if (user2.wallInQuestion === false) {
-      user2.x += user2.hostMaze.cellWidth;
-      update(user2);
-      user2.colNum++;
-    }
-  }
-
-  if (event.code === "KeyS") {
-    user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.bottomWall;
-    key = "down";
-
-    if (user2.wallInQuestion === false) {
-      user2.y += user2.hostMaze.cellHeight;
-      update(user2);
-      user2.rowNum++;
-    }
-  }
-
-  if (event.code === "KeyA") {
-    user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.leftWall;
-    key = "left";
-
-    if (user2.wallInQuestion === false) {
-      user2.x -= user2.hostMaze.cellWidth;
-      update(user2);
-      user2.colNum--;
-    }
-  }
-
-});
-
-
-//& ---------------------------------------------------------
-
-function determineWinner() {
-  if (user1.x === 585 && user1.y === 438.75) {
-    alert("Blue circle wins! Purple circle loses. If you would like to continue, press Play Again.");
-    startButton.textContent = "Play Again";
-    // Reset user1
-    user1.x = 0
-    user1.y = 0;
-    
-     // Reset user2
-     user2.x = 0;
-     user2.y = 0;
-  }
-  
-  if (user2.x === 15 && user2.y === 11.25) {
-    alert("Purple circle wins! Blue circle loses. If you would like to continue, press Play Again.");
-    startButton.textContent = "Play Again";
-    // Reset user1
-    user1.x = 0;
-    user1.y = 0;
-    
-     // Reset user2
-     user2.x = 0;
-     user2.y = 0;
-
-  }
-
-}
-
+  user2.rowNum = newMaze.grid.length - 1;
+  user2.colNum = newMaze.grid[0].length - 1;
+  user2.x = 585;
+  user2.y = 438.75;
+  user2.drawPlayer();
 }
 
 //&-------------------------------------------------------
 
+//* Create maze instance and two player instances
+let newMaze = new Maze(600, 450, 20, 20);
+newMaze.createGrid();
+newMaze.buildPathFrom();
+newMaze.printMaze();
+
+const user1 = new Player(0, 0, newMaze, "blue");
+user1.drawPlayer();
+
+const user2 = new Player(
+  newMaze.grid.length - 1,
+  newMaze.grid[0].length - 1,
+  newMaze,
+  "purple"
+);
+user2.drawPlayer();
+
+//* Start Button
 const startButton = document.getElementById("start");
-startButton.addEventListener("click", function() {
+startButton.addEventListener("click", function () {
+  reset();
   playGame();
 });
-
-
-
