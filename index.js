@@ -273,6 +273,7 @@ class Player {
 function playGame() {
   canvas.style.display = "block";
   round++;
+  gameText.textContent = `Round ${round}`;
   console.log(`Round ${round} -->`);
 
   //! Updating player position
@@ -466,17 +467,13 @@ function playGame() {
   //! End game
   function determineWinner() {
     if (user1.x === 585 && user1.y === 438.75) {
-      alert(
-        `Round ${round} results: Blue circle wins! Purple circle loses. If you would like to continue, press Play Again.`
-      );
+      gameText.textContent = `Round ${round} results: Blue circle wins! Purple circle loses. If you would like to continue, press Play Again.`;
       console.log("Blue circle wins.");
       startButton.textContent = "Play Again";
     }
 
     if (user2.x === 15 && user2.y === 11.25) {
-      alert(
-        `Round ${round} results: Purple circle wins! Blue circle loses. If you would like to continue, press Play Again.`
-      );
+      gameText.textContent = `Round ${round} results: Purple circle wins! Blue circle loses. If you would like to continue, press Play Again.`
       console.log("Purple circle wins.");
       startButton.textContent = "Play Again";
     }
