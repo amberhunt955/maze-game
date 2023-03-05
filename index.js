@@ -13,6 +13,8 @@ gameText.textContent =
 let currentCell;
 let previousCell;
 let round = 0;
+let blueScore = 0;
+let purpleScore = 0;
 
 //* Create the Maze class
 class Maze {
@@ -271,9 +273,9 @@ class Player {
 
 //* Create the playGame function
 function playGame() {
-  canvas.style.display = "block";
   round++;
-  gameText.textContent = `Round ${round}`;
+  canvas.style.display = "block";
+  gameText.innerHTML = `<b>Round ${round}</b> <br> Blue Score: ${blueScore} <br> Purple Score: ${purpleScore}`;
   console.log(`Round ${round} -->`);
 
   //! Updating player position
@@ -467,13 +469,15 @@ function playGame() {
   //! End game
   function determineWinner() {
     if (user1.x === 585 && user1.y === 438.75) {
+      blueScore++;
       gameText.textContent = `Round ${round} results: Blue circle wins! Purple circle loses. If you would like to continue, press Play Again.`;
       console.log("Blue circle wins.");
       startButton.textContent = "Play Again";
     }
 
     if (user2.x === 15 && user2.y === 11.25) {
-      gameText.textContent = `Round ${round} results: Purple circle wins! Blue circle loses. If you would like to continue, press Play Again.`
+      purpleScore++;
+      gameText.textContent = `Round ${round} results: Purple circle wins! Blue circle loses. If you would like to continue, press Play Again.`;
       console.log("Purple circle wins.");
       startButton.textContent = "Play Again";
     }
@@ -482,6 +486,15 @@ function playGame() {
 
 //* Reset function
 function reset() {
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  newMaze.grid = [];
+
+  newMaze.createGrid();
+  newMaze.buildPathFrom();
+  newMaze.printMaze();
+
   user1.rowNum = 0;
   user1.colNum = 0;
   user1.x = 15;
