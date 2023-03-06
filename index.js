@@ -560,3 +560,5 @@ user2.drawPlayer();
 //&-------------------------------------------------------
 
 console.log(firstMaze);
+
+// Test commit
