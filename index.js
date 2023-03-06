@@ -6,7 +6,7 @@ canvas.style.display = "none";
 
 //* Start Button
 const startButton = document.createElement("button");
-startButton.textContent = "Start Game"
+startButton.textContent = "Start Game";
 startButton.addEventListener("click", function () {
   reset();
   playGame();
@@ -15,7 +15,7 @@ startButton.addEventListener("click", function () {
 //* Get game text
 const gameText = document.getElementById("game-text");
 gameText.textContent =
-  "This is a two player game. Move the blue circle with the arrow keys. Move the purple circle with the AWDS keys. The goal of the blue circle is to get to the bottom right corner. The goal of the purple circle is to get to the top left corner. Whomever achieves their  goal first, wins!";
+  "This is a two player game. Move the yellow circle with the arrow keys. Move the green circle with the AWDS keys. The goal of the yellow circle is to get to the bottom right corner. The goal of the green circle is to get to the top left corner. Whomever achieves their goal first, wins!";
 
 const container = document.getElementById("container");
 const body = document.getElementById("body");
@@ -25,13 +25,12 @@ body.appendChild(startButton);
 
 const h1 = document.querySelector("h1");
 
-
 //* Declare currentCell and previousCell variables
 let currentCell;
 let previousCell;
 let round = 0;
-let blueScore = 0;
-let purpleScore = 0;
+let yellowScore = 0;
+let greenScore = 0;
 
 //* Create the Maze class
 class Maze {
@@ -299,7 +298,7 @@ function playGame() {
   body.style.flexDirection = "row";
   round++;
   canvas.style.display = "block";
-  gameText.innerHTML = `<b>Round ${round}</b> <br> Blue Score: ${blueScore} <br> Purple Score: ${purpleScore}`;
+  gameText.innerHTML = `<b>Round ${round}</b><br>Yellow Score: ${yellowScore}<br/>Green Score: ${greenScore}`;
   console.log(`Round ${round} -->`);
 
   //! Updating player position
@@ -371,22 +370,34 @@ function playGame() {
   function checkIfWall(player) {
     if (key === "up" && player.rowNum % 1 === 0) {
       player.wallInQuestion =
-        player.hostMaze.grid[Math.floor(player.rowNum)][Math.floor(player.colNum)].walls.topWall;
+        player.hostMaze.grid[Math.floor(player.rowNum)][
+          Math.floor(player.colNum)
+        ].walls.topWall;
     }
 
-    if (key === "right" && player.colNum < player.hostMaze.grid[0].length && player.colNum % 1 === 0) {
+    if (
+      key === "right" &&
+      player.colNum < player.hostMaze.grid[0].length &&
+      player.colNum % 1 === 0
+    ) {
       player.wallInQuestion =
-        player.hostMaze.grid[Math.floor(player.rowNum)][Math.floor(player.colNum)].walls.rightWall;
+        player.hostMaze.grid[Math.floor(player.rowNum)][
+          Math.floor(player.colNum)
+        ].walls.rightWall;
     }
 
     if (key === "down" && player.rowNum % 1 === 0) {
       player.wallInQuestion =
-        player.hostMaze.grid[Math.floor(player.rowNum)][Math.floor(player.colNum)].walls.bottomWall;
+        player.hostMaze.grid[Math.floor(player.rowNum)][
+          Math.floor(player.colNum)
+        ].walls.bottomWall;
     }
 
     if (key === "left" && player.colNum % 1 === 0) {
       player.wallInQuestion =
-        player.hostMaze.grid[Math.floor(player.rowNum)][Math.floor(player.colNum)].walls.leftWall;
+        player.hostMaze.grid[Math.floor(player.rowNum)][
+          Math.floor(player.colNum)
+        ].walls.leftWall;
     }
   }
 
@@ -395,79 +406,108 @@ function playGame() {
     //& user1 controls
     if (event.code === "ArrowUp") {
       if (user1.colNum % 1 === 0) {
-      user1.wallInQuestion = user1.hostMaze.grid[Math.floor(user1.rowNum)][Math.floor(user1.colNum)].walls.topWall;
-      key = "up";
+        user1.wallInQuestion =
+          user1.hostMaze.grid[Math.floor(user1.rowNum)][
+            Math.floor(user1.colNum)
+          ].walls.topWall;
+        key = "up";
 
-      if (user1.wallInQuestion === false) {
-        user1.y -= user1.hostMaze.cellHeight / 2;
-        update(user1);
-        user1.rowNum -= 0.5;
-      } else if (user1.wallInQuestion === true && user1.rowNum % 1 !== 0 && user1.colNum % 1 === 0) {
-        user1.wallInQuestion = false;
-        user1.y -= user1.hostMaze.cellHeight / 2;
-        update(user1);
-        user1.rowNum -= 0.5;
+        if (user1.wallInQuestion === false) {
+          user1.y -= user1.hostMaze.cellHeight / 2;
+          update(user1);
+          user1.rowNum -= 0.5;
+        } else if (
+          user1.wallInQuestion === true &&
+          user1.rowNum % 1 !== 0 &&
+          user1.colNum % 1 === 0
+        ) {
+          user1.wallInQuestion = false;
+          user1.y -= user1.hostMaze.cellHeight / 2;
+          update(user1);
+          user1.rowNum -= 0.5;
+        }
       }
     }
-  }
 
     if (event.code === "ArrowRight") {
       if (user1.rowNum % 1 === 0) {
-      user1.wallInQuestion = user1.hostMaze.grid[Math.floor(user1.rowNum)][Math.floor(user1.colNum)].walls.rightWall;
-      key = "right";
+        user1.wallInQuestion =
+          user1.hostMaze.grid[Math.floor(user1.rowNum)][
+            Math.floor(user1.colNum)
+          ].walls.rightWall;
+        key = "right";
 
-      if (user1.wallInQuestion === false) {
-        user1.x += user1.hostMaze.cellWidth / 2;
-        update(user1);
-        user1.colNum += 0.5;
-      } else if (user1.wallInQuestion === true && user1.colNum % 1 !== 0 && user1.rowNum % 1 === 0) {
-        user1.wallInQuestion = false;
-        user1.x += user1.hostMaze.cellWidth / 2;
-        update(user1);
-        user1.colNum += 0.5;
+        if (user1.wallInQuestion === false) {
+          user1.x += user1.hostMaze.cellWidth / 2;
+          update(user1);
+          user1.colNum += 0.5;
+        } else if (
+          user1.wallInQuestion === true &&
+          user1.colNum % 1 !== 0 &&
+          user1.rowNum % 1 === 0
+        ) {
+          user1.wallInQuestion = false;
+          user1.x += user1.hostMaze.cellWidth / 2;
+          update(user1);
+          user1.colNum += 0.5;
+        }
       }
     }
-  }
 
     if (event.code === "ArrowDown") {
       if (user1.colNum % 1 === 0) {
-      user1.wallInQuestion = user1.hostMaze.grid[Math.floor(user1.rowNum)][Math.floor(user1.colNum)].walls.bottomWall;
-      key = "down";
+        user1.wallInQuestion =
+          user1.hostMaze.grid[Math.floor(user1.rowNum)][
+            Math.floor(user1.colNum)
+          ].walls.bottomWall;
+        key = "down";
 
-      if (user1.wallInQuestion === false) {
-        user1.y += user1.hostMaze.cellHeight / 2;
-        update(user1);
-        user1.rowNum += 0.5;
-      } else if (user1.wallInQuestion === true && user1.rowNum % 1 !== 0 && user1.colNum % 1 === 0) {
-        user1.wallInQuestion = false;
-        user1.y += user1.hostMaze.cellHeight / 2;
-        update(user1);
-        user1.rowNum += 0.5;
+        if (user1.wallInQuestion === false) {
+          user1.y += user1.hostMaze.cellHeight / 2;
+          update(user1);
+          user1.rowNum += 0.5;
+        } else if (
+          user1.wallInQuestion === true &&
+          user1.rowNum % 1 !== 0 &&
+          user1.colNum % 1 === 0
+        ) {
+          user1.wallInQuestion = false;
+          user1.y += user1.hostMaze.cellHeight / 2;
+          update(user1);
+          user1.rowNum += 0.5;
+        }
       }
     }
-  }
 
     if (event.code === "ArrowLeft") {
       if (user1.rowNum % 1 === 0) {
-      user1.wallInQuestion = user1.hostMaze.grid[Math.floor(user1.rowNum)][Math.floor(user1.colNum)].walls.leftWall;
-      key = "left";
+        user1.wallInQuestion =
+          user1.hostMaze.grid[Math.floor(user1.rowNum)][
+            Math.floor(user1.colNum)
+          ].walls.leftWall;
+        key = "left";
 
-      if (user1.wallInQuestion === false) {
-        user1.x -= user1.hostMaze.cellWidth / 2;
-        update(user1);
-        user1.colNum -= 0.5;
-      } else if (user1.wallInQuestion === true && user1.colNum % 1 !== 0 && user1.rowNum % 1 === 0) {
-        user1.wallInQuestion = false;
-        user1.x -= user1.hostMaze.cellWidth / 2;
-        update(user1);
-        user1.colNum -= 0.5;
+        if (user1.wallInQuestion === false) {
+          user1.x -= user1.hostMaze.cellWidth / 2;
+          update(user1);
+          user1.colNum -= 0.5;
+        } else if (
+          user1.wallInQuestion === true &&
+          user1.colNum % 1 !== 0 &&
+          user1.rowNum % 1 === 0
+        ) {
+          user1.wallInQuestion = false;
+          user1.x -= user1.hostMaze.cellWidth / 2;
+          update(user1);
+          user1.colNum -= 0.5;
+        }
       }
     }
-  }
 
     //& user2 controls
     if (event.code === "KeyW") {
-      user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.topWall;
+      user2.wallInQuestion =
+        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.topWall;
       key = "up";
 
       if (user2.wallInQuestion === false) {
@@ -478,7 +518,8 @@ function playGame() {
     }
 
     if (event.code === "KeyD") {
-      user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.rightWall;
+      user2.wallInQuestion =
+        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.rightWall;
       key = "right";
 
       if (user2.wallInQuestion === false) {
@@ -489,7 +530,8 @@ function playGame() {
     }
 
     if (event.code === "KeyS") {
-      user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.bottomWall;
+      user2.wallInQuestion =
+        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.bottomWall;
       key = "down";
 
       if (user2.wallInQuestion === false) {
@@ -500,7 +542,8 @@ function playGame() {
     }
 
     if (event.code === "KeyA") {
-      user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.leftWall;
+      user2.wallInQuestion =
+        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.leftWall;
       key = "left";
 
       if (user2.wallInQuestion === false) {
@@ -514,25 +557,15 @@ function playGame() {
   //! End game
   function determineWinner() {
     if (user1.x === 585 && user1.y === 438.75) {
-      blueScore++;
-      gameText.textContent = `Round ${round} results: Blue circle wins! Purple circle loses. If you would like to continue, press Play Again.`;
-      console.log("Blue circle wins.");
-      console.log(`Blue circle`);
-      console.log(user1);
-      console.log(`Purple circle`);
-      console.log(user2);
+      yellowScore++;
+      gameText.textContent = `Round ${round} results: Yellow circle wins! Green circle loses. If you would like to continue, press Play Again.`;
       startButton.textContent = "Play Again";
       container.appendChild(startButton);
     }
 
     if (user2.x === 15 && user2.y === 11.25) {
-      purpleScore++;
-      gameText.textContent = `Round ${round} results: Purple circle wins! Blue circle loses. If you would like to continue, press Play Again.`;
-      console.log("Purple circle wins.");
-      console.log(`Blue circle`);
-      console.log(user1);
-      console.log(`Purple circle`);
-      console.log(user2);
+      greenScore++;
+      gameText.textContent = `Round ${round} results: Green circle wins! Yellow circle loses. If you would like to continue, press Play Again.`;
       startButton.textContent = "Play Again";
       container.appendChild(startButton);
     }
@@ -541,7 +574,6 @@ function playGame() {
 
 //* Reset function
 function reset() {
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   firstMaze.grid = [];

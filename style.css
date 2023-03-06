@@ -2,14 +2,15 @@
   margin: 0;
   padding: 0;
   font-family: monospace;
-  color: #FFFFD0;
-  text-shadow: 1px 1px 2px rgb(104, 8, 8), 0 0 1em rgb(10, 185, 10), 0 0 0.2em rgb(91, 91, 155);
+  color: rgb(255, 255, 255);
+  text-shadow: 8px 1px 4px rgb(88, 46, 46), 0 0 1em rgb(100, 42, 50);
 }
 
 body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   background-image: url("road.jpg");
   background-position: center;
   background-repeat: no-repeat;
@@ -31,22 +32,30 @@ button {
   padding: 20px;
   border-radius: 20px;
   background-color: black;
+  box-shadow: 0 0 10px 0 black;
 }
 
 #canvas {
   margin: 20px;
   border: none;
   background-image: url(asphalt.jpg);
+  box-shadow: 0 0 20px 0 grey;
 }
 
 h1 {
-  font-size: 60px;
+  font-size: 65px;
   text-transform: uppercase;
 }
 
 p {
   padding: 20px;
-  width: 400px;
+  min-width: fit-content;
+  max-width: 400px;
   font-size: 25px;
   text-align: center;
+  box-shadow: 0 0 20px 0 grey;
+  background-color: rgba(48, 45, 45, 0.6);
+  border-radius: 20px;
+  margin-top: 10px;
+  margin-right: 20px;
 }
