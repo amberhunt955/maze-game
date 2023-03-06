@@ -11,7 +11,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: url("road.jpg");
+  background-image: url("images/road.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -38,7 +38,7 @@ button {
 #canvas {
   margin: 20px;
   border: none;
-  background-image: url(asphalt.jpg);
+  background-image: url(images/asphalt.jpg);
   box-shadow: 0 0 20px 0 grey;
 }
 

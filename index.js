@@ -25,12 +25,13 @@ body.appendChild(startButton);
 
 const h1 = document.querySelector("h1");
 
-//* Declare currentCell and previousCell variables
+//* Global variables
 let currentCell;
 let previousCell;
 let round = 0;
 let yellowScore = 0;
 let greenScore = 0;
+let framesPerSecond = 10;
 
 //* Create the Maze class
 class Maze {
@@ -302,7 +303,6 @@ function playGame() {
   console.log(`Round ${round} -->`);
 
   //! Updating player position
-  let framesPerSecond = 10;
   let key;
 
   function update(player) {
@@ -369,145 +369,92 @@ function playGame() {
 
   function checkIfWall(player) {
     if (key === "up" && player.rowNum % 1 === 0) {
-      player.wallInQuestion =
-        player.hostMaze.grid[Math.floor(player.rowNum)][
-          Math.floor(player.colNum)
-        ].walls.topWall;
+      player.wallInQuestion = player.hostMaze.grid[Math.floor(player.rowNum)][Math.floor(player.colNum)].walls.topWall;
     }
 
-    if (
-      key === "right" &&
-      player.colNum < player.hostMaze.grid[0].length &&
-      player.colNum % 1 === 0
-    ) {
-      player.wallInQuestion =
-        player.hostMaze.grid[Math.floor(player.rowNum)][
-          Math.floor(player.colNum)
-        ].walls.rightWall;
+    if (key === "right" && player.colNum < player.hostMaze.grid[0].length && player.colNum % 1 === 0) {
+      player.wallInQuestion = player.hostMaze.grid[Math.floor(player.rowNum)][Math.floor(player.colNum)].walls.rightWall;
     }
 
     if (key === "down" && player.rowNum % 1 === 0) {
-      player.wallInQuestion =
-        player.hostMaze.grid[Math.floor(player.rowNum)][
-          Math.floor(player.colNum)
-        ].walls.bottomWall;
+      player.wallInQuestion = player.hostMaze.grid[Math.floor(player.rowNum)][Math.floor(player.colNum)].walls.bottomWall;
     }
 
     if (key === "left" && player.colNum % 1 === 0) {
-      player.wallInQuestion =
-        player.hostMaze.grid[Math.floor(player.rowNum)][
-          Math.floor(player.colNum)
-        ].walls.leftWall;
+      player.wallInQuestion = player.hostMaze.grid[Math.floor(player.rowNum)][Math.floor(player.colNum)].walls.leftWall;
     }
   }
 
   //! Keyboard controls
   addEventListener("keydown", function (event) {
     //& user1 controls
-    if (event.code === "ArrowUp") {
-      if (user1.colNum % 1 === 0) {
-        user1.wallInQuestion =
-          user1.hostMaze.grid[Math.floor(user1.rowNum)][
-            Math.floor(user1.colNum)
-          ].walls.topWall;
+    if (event.code === "ArrowUp" && user1.colNum % 1 === 0) {
+        user1.wallInQuestion = user1.hostMaze.grid[Math.floor(user1.rowNum)][Math.floor(user1.colNum)].walls.topWall;
         key = "up";
 
         if (user1.wallInQuestion === false) {
           user1.y -= user1.hostMaze.cellHeight / 2;
           update(user1);
           user1.rowNum -= 0.5;
-        } else if (
-          user1.wallInQuestion === true &&
-          user1.rowNum % 1 !== 0 &&
-          user1.colNum % 1 === 0
-        ) {
+        } else if (user1.wallInQuestion === true && user1.rowNum % 1 !== 0 && user1.colNum % 1 === 0) {
           user1.wallInQuestion = false;
           user1.y -= user1.hostMaze.cellHeight / 2;
           update(user1);
           user1.rowNum -= 0.5;
         }
-      }
     }
 
-    if (event.code === "ArrowRight") {
-      if (user1.rowNum % 1 === 0) {
-        user1.wallInQuestion =
-          user1.hostMaze.grid[Math.floor(user1.rowNum)][
-            Math.floor(user1.colNum)
-          ].walls.rightWall;
+    if (event.code === "ArrowRight" && user1.rowNum % 1 === 0) {
+        user1.wallInQuestion = user1.hostMaze.grid[Math.floor(user1.rowNum)][Math.floor(user1.colNum)].walls.rightWall;
         key = "right";
 
         if (user1.wallInQuestion === false) {
           user1.x += user1.hostMaze.cellWidth / 2;
           update(user1);
           user1.colNum += 0.5;
-        } else if (
-          user1.wallInQuestion === true &&
-          user1.colNum % 1 !== 0 &&
-          user1.rowNum % 1 === 0
-        ) {
+        } else if (user1.wallInQuestion === true && user1.colNum % 1 !== 0 && user1.rowNum % 1 === 0) {
           user1.wallInQuestion = false;
           user1.x += user1.hostMaze.cellWidth / 2;
           update(user1);
           user1.colNum += 0.5;
         }
       }
-    }
 
-    if (event.code === "ArrowDown") {
-      if (user1.colNum % 1 === 0) {
-        user1.wallInQuestion =
-          user1.hostMaze.grid[Math.floor(user1.rowNum)][
-            Math.floor(user1.colNum)
-          ].walls.bottomWall;
+    if (event.code === "ArrowDown" && user1.colNum % 1 === 0) {
+        user1.wallInQuestion = user1.hostMaze.grid[Math.floor(user1.rowNum)][Math.floor(user1.colNum)].walls.bottomWall;
         key = "down";
 
         if (user1.wallInQuestion === false) {
           user1.y += user1.hostMaze.cellHeight / 2;
           update(user1);
           user1.rowNum += 0.5;
-        } else if (
-          user1.wallInQuestion === true &&
-          user1.rowNum % 1 !== 0 &&
-          user1.colNum % 1 === 0
-        ) {
+        } else if (user1.wallInQuestion === true && user1.rowNum % 1 !== 0 && user1.colNum % 1 === 0) {
           user1.wallInQuestion = false;
           user1.y += user1.hostMaze.cellHeight / 2;
           update(user1);
           user1.rowNum += 0.5;
         }
       }
-    }
 
-    if (event.code === "ArrowLeft") {
-      if (user1.rowNum % 1 === 0) {
-        user1.wallInQuestion =
-          user1.hostMaze.grid[Math.floor(user1.rowNum)][
-            Math.floor(user1.colNum)
-          ].walls.leftWall;
+    if (event.code === "ArrowLeft" && user1.rowNum % 1 === 0) {
+        user1.wallInQuestion = user1.hostMaze.grid[Math.floor(user1.rowNum)][Math.floor(user1.colNum)].walls.leftWall;
         key = "left";
 
         if (user1.wallInQuestion === false) {
           user1.x -= user1.hostMaze.cellWidth / 2;
           update(user1);
           user1.colNum -= 0.5;
-        } else if (
-          user1.wallInQuestion === true &&
-          user1.colNum % 1 !== 0 &&
-          user1.rowNum % 1 === 0
-        ) {
+        } else if (user1.wallInQuestion === true && user1.colNum % 1 !== 0 && user1.rowNum % 1 === 0) {
           user1.wallInQuestion = false;
           user1.x -= user1.hostMaze.cellWidth / 2;
           update(user1);
           user1.colNum -= 0.5;
         }
       }
-    }
 
     //& user2 controls
     if (event.code === "KeyW") {
-      user2.wallInQuestion =
-        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.topWall;
+      user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.topWall;
       key = "up";
 
       if (user2.wallInQuestion === false) {
@@ -518,8 +465,7 @@ function playGame() {
     }
 
     if (event.code === "KeyD") {
-      user2.wallInQuestion =
-        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.rightWall;
+      user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.rightWall;
       key = "right";
 
       if (user2.wallInQuestion === false) {
@@ -530,8 +476,7 @@ function playGame() {
     }
 
     if (event.code === "KeyS") {
-      user2.wallInQuestion =
-        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.bottomWall;
+      user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.bottomWall;
       key = "down";
 
       if (user2.wallInQuestion === false) {
@@ -542,8 +487,7 @@ function playGame() {
     }
 
     if (event.code === "KeyA") {
-      user2.wallInQuestion =
-        user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.leftWall;
+      user2.wallInQuestion = user2.hostMaze.grid[user2.rowNum][user2.colNum].walls.leftWall;
       key = "left";
 
       if (user2.wallInQuestion === false) {
@@ -574,6 +518,8 @@ function playGame() {
 
 //* Reset function
 function reset() {
+  framesPerSecond -= 2;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   firstMaze.grid = [];
@@ -584,20 +530,22 @@ function reset() {
 
   user1.rowNum = 0;
   user1.colNum = 0;
-  user1.x = 15;
-  user1.y = 11.25;
+  user1.x = firstMaze.cellWidth / 2;
+  user1.y = firstMaze.cellHeight / 2;
   user1.drawPlayer();
 
   user2.rowNum = firstMaze.grid.length - 1;
   user2.colNum = firstMaze.grid[0].length - 1;
-  user2.x = 585;
-  user2.y = 438.75;
+  user2.x = canvas.width - firstMaze.cellWidth / 2;
+  user2.y = canvas.height - firstMaze.cellHeight / 2;
   user2.drawPlayer();
 }
 
 //&-------------------------------------------------------
 
-//* Create maze instances and two player instances
+//* Create maze instance and two player instances
+// (Will later create more maze instances of various sizes for different levels)
+
 let firstMaze = new Maze(600, 450, 20, 20);
 firstMaze.createGrid();
 firstMaze.buildPathFrom();
@@ -606,12 +554,9 @@ firstMaze.printMaze();
 const user1 = new Player(0, 0, firstMaze, "yellow");
 user1.drawPlayer();
 
-const user2 = new Player(
-  firstMaze.grid.length - 1,
-  firstMaze.grid[0].length - 1,
-  firstMaze,
-  "#16FF00"
-);
+const user2 = new Player(firstMaze.grid.length - 1, firstMaze.grid[0].length - 1, firstMaze, "#16FF00");
 user2.drawPlayer();
 
 //&-------------------------------------------------------
+
+console.log(firstMaze);
