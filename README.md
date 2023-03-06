@@ -1,11 +1,13 @@
 <h1 align="center">Maze Game</h1>
 
-<p align="center">This is a two player game. Move the yellow circle with the arrow keys. Move the green circle with the AWDS keys. The goal of the yellow circle is to get to the bottom right corner. The goal of the green circle is to get to the top left corner. Whomever achieves their goal first, wins!</p>
+<p align="center">Two-player best of 3 game including a randomly generated maze.</p>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Game Screen Example]](images/game_screenshot.png)
+<p>Move the yellow circle with the arrow keys. Move the green circle with the AWDS keys. The goal of the yellow circle is to get to the bottom right corner. The goal of the green circle is to get to the top left corner. Whomever achieves their goal first, wins!</p>
+
+![game_screenshot](https://user-images.githubusercontent.com/122638466/223016211-77894406-5b21-44d7-b45a-cc22004b95f0.png)
 
 ### Built With
 
@@ -26,7 +28,7 @@
 
 Amber Hunt - Find me on [LinkedIn](https://www.linkedin.com/in/amber-hunt-90b612263/)
 
-Project Link: [https://github.com/github_username/repo_name](https://amberhunt955.github.io/maze-game/)
+[Project Link](https://amberhunt955.github.io/maze-game/)
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
