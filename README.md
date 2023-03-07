@@ -1,11 +1,11 @@
 <h1 align="center" id="readme-top">Maze Game</h1>
 
-<p align="center">Two-player best of 2 game including randomly generated mazes.</p>
+<p align="center">Two-player best of 3 game including randomly generated mazes.</p>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<p>ROAD TRIP! Who can get to their destination first? Move the yellow circle with the arrow keys. Move the green circle with the AWDS keys. The goal of the yellow circle is to get to the bottom right corner. The goal of the green circle is to get to the top left corner. Arrive to your destination before your opponent to win the round. This game is best of 2.</p>
+<p>ROAD TRIP! Who can get to their destination first? Move the yellow circle with the arrow keys. Move the green circle with the AWDS keys. The goal of the yellow circle is to get to the bottom right corner. The goal of the green circle is to get to the top left corner. Arrive to your destination before your opponent to win the round. This game is best of 3.</p>
 
 ![game_screenshot](https://user-images.githubusercontent.com/122638466/223304807-bfc8bff4-7b25-4883-a8e1-98b161638638.png)
 
@@ -18,7 +18,7 @@
 <!-- FUTURE IMPROVEMENTS -->
 ## Future Improvements
 
-- Smoother animations - they currently decrease significantly in quality with each round (which is why I only have 2 rounds at the moment)
+- Smoother animations - they currently decrease significantly in quality with each round
 - Different sized mazes for each level
 - Improved user experience - player continues on path until there is a direction choice
 - More features: "rooms" to visit, prizes to collect, and obstacles to avoid

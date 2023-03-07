@@ -16,7 +16,7 @@ const h1 = document.querySelector("h1");
 const containerDiv = document.getElementById("container");
 const gameText = document.getElementById("game-text");
 gameText.textContent =
-  "ROAD TRIP! Who can get to their destination first? Move the yellow circle with the arrow keys. Move the green circle with the AWDS keys. The goal of the yellow circle is to get to the bottom right corner. The goal of the green circle is to get to the top left corner. Arrive to your destination before your opponent to win the round. This game is best of 2. Good luck!";
+  "ROAD TRIP! Who can get to their destination first? Move the yellow circle with the arrow keys. Move the green circle with the AWDS keys. The goal of the yellow circle is to get to the bottom right corner. The goal of the green circle is to get to the top left corner. Arrive to your destination before your opponent to win the round. This game is best of 3. Good luck!";
 
 const startButton = document.getElementById("button");
 startButton.addEventListener("click", function () {
@@ -325,19 +325,19 @@ function playRound() {
   const framesPerSecond = 10;
 
   function update(player) {
-      checkIfWall(player);
+    checkIfWall(player);
 
-      if (player.wallInQuestion === false) {
-        ctx.clearRect(
-          (player.colNum + 0.5) * player.hostMaze.cellWidth - player.radius - 2,
-          (player.rowNum + 0.5) * player.hostMaze.cellHeight - player.radius - 2,
-          player.radius * 2 + 4,
-          player.radius * 2 + 4
-        );
-        player.drawPlayer();
-        determineRoundWinner();
+    if (player.wallInQuestion === false) {
+      ctx.clearRect(
+        (player.colNum + 0.5) * player.hostMaze.cellWidth - player.radius - 2,
+        (player.rowNum + 0.5) * player.hostMaze.cellHeight - player.radius - 2,
+        player.radius * 2 + 4,
+        player.radius * 2 + 4
+      );
+      player.drawPlayer();
+      determineRoundWinner();
 
-        setTimeout(function () {
+      setTimeout(function () {
         requestAnimationFrame(function () {
           checkIfWall(player);
           if (player.wallInQuestion === false) {
@@ -346,22 +346,22 @@ function playRound() {
             changeRowOrCol(player);
           }
         });
-        }, 1000 / framesPerSecond);
-      }
+      }, 1000 / framesPerSecond);
     }
+  }
 
   function changePosition(player) {
-    if (key === "up") player.y -= player.hostMaze.cellHeight / 2;
-    if (key === "right") player.x += player.hostMaze.cellWidth / 2;
-    if (key === "down") player.y += player.hostMaze.cellHeight / 2;
-    if (key === "left") player.x -= player.hostMaze.cellWidth / 2;
+    if (key === "up") player.y -= player.hostMaze.cellHeight / 4;
+    if (key === "right") player.x += player.hostMaze.cellWidth / 4;
+    if (key === "down") player.y += player.hostMaze.cellHeight / 4;
+    if (key === "left") player.x -= player.hostMaze.cellWidth / 4;
   }
 
   function changeRowOrCol(player) {
-    if (key === "up") player.rowNum -= 0.5;
-    if (key === "right") player.colNum += 0.5;
-    if (key === "down") player.rowNum += 0.5;
-    if (key === "left") player.colNum -= 0.5;
+    if (key === "up") player.rowNum -= 0.25;
+    if (key === "right") player.colNum += 0.25;
+    if (key === "down") player.rowNum += 0.25;
+    if (key === "left") player.colNum -= 0.25;
   }
 
   function checkIfWall(player) {
@@ -390,14 +390,14 @@ function playRound() {
       key = "up";
 
       if (user1.wallInQuestion === false) {
-        user1.y -= user1.hostMaze.cellHeight / 2;
+        user1.y -= user1.hostMaze.cellHeight / 4;
         update(user1);
-        user1.rowNum -= 0.5;
+        user1.rowNum -= 0.25;
       } else if (user1.wallInQuestion === true && user1.rowNum % 1 !== 0 && user1.colNum % 1 === 0) {
         user1.wallInQuestion = false;
-        user1.y -= user1.hostMaze.cellHeight / 2;
+        user1.y -= user1.hostMaze.cellHeight / 4;
         update(user1);
-        user1.rowNum -= 0.5;
+        user1.rowNum -= 0.25;
       }
     }
 
@@ -406,14 +406,14 @@ function playRound() {
       key = "right";
 
       if (user1.wallInQuestion === false) {
-        user1.x += user1.hostMaze.cellWidth / 2;
+        user1.x += user1.hostMaze.cellWidth / 4;
         update(user1);
-        user1.colNum += 0.5;
+        user1.colNum += 0.25;
       } else if (user1.wallInQuestion === true && user1.colNum % 1 !== 0 && user1.rowNum % 1 === 0) {
         user1.wallInQuestion = false;
-        user1.x += user1.hostMaze.cellWidth / 2;
+        user1.x += user1.hostMaze.cellWidth / 4;
         update(user1);
-        user1.colNum += 0.5;
+        user1.colNum += 0.25;
       }
     }
 
@@ -422,14 +422,14 @@ function playRound() {
       key = "down";
 
       if (user1.wallInQuestion === false) {
-        user1.y += user1.hostMaze.cellHeight / 2;
+        user1.y += user1.hostMaze.cellHeight / 4;
         update(user1);
-        user1.rowNum += 0.5;
+        user1.rowNum += 0.25;
       } else if (user1.wallInQuestion === true && user1.rowNum % 1 !== 0 && user1.colNum % 1 === 0) {
         user1.wallInQuestion = false;
-        user1.y += user1.hostMaze.cellHeight / 2;
+        user1.y += user1.hostMaze.cellHeight / 4;
         update(user1);
-        user1.rowNum += 0.5;
+        user1.rowNum += 0.25;
       }
     }
 
@@ -438,14 +438,14 @@ function playRound() {
       key = "left";
 
       if (user1.wallInQuestion === false) {
-        user1.x -= user1.hostMaze.cellWidth / 2;
+        user1.x -= user1.hostMaze.cellWidth / 4;
         update(user1);
-        user1.colNum -= 0.5;
+        user1.colNum -= 0.25;
       } else if (user1.wallInQuestion === true && user1.colNum % 1 !== 0 && user1.rowNum % 1 === 0) {
         user1.wallInQuestion = false;
-        user1.x -= user1.hostMaze.cellWidth / 2;
+        user1.x -= user1.hostMaze.cellWidth / 4;
         update(user1);
-        user1.colNum -= 0.5;
+        user1.colNum -= 0.25;
       }
     }
 
@@ -455,14 +455,14 @@ function playRound() {
       key = "up";
 
       if (user2.wallInQuestion === false) {
-        user2.y -= user2.hostMaze.cellHeight / 2;
+        user2.y -= user2.hostMaze.cellHeight / 4;
         update(user2);
-        user2.rowNum -= 0.5;
+        user2.rowNum -= 0.25;
       } else if (user2.wallInQuestion === true && user2.rowNum % 1 !== 0 && user2.colNum % 1 === 0) {
         user2.wallInQuestion = false;
-        user2.y -= user2.hostMaze.cellHeight / 2;
+        user2.y -= user2.hostMaze.cellHeight / 4;
         update(user2);
-        user2.rowNum -= 0.5;
+        user2.rowNum -= 0.25;
       }
     }
 
@@ -471,14 +471,14 @@ function playRound() {
       key = "right";
 
       if (user2.wallInQuestion === false) {
-        user2.x += user2.hostMaze.cellWidth / 2;
+        user2.x += user2.hostMaze.cellWidth / 4;
         update(user2);
-        user2.colNum += 0.5;
+        user2.colNum += 0.25;
       } else if (user2.wallInQuestion === true && user2.colNum % 1 !== 0 && user2.rowNum % 1 === 0) {
         user2.wallInQuestion = false;
-        user2.x += user2.hostMaze.cellWidth / 2;
+        user2.x += user2.hostMaze.cellWidth / 4;
         update(user2);
-        user2.colNum += 0.5;
+        user2.colNum += 0.25;
       }
     }
 
@@ -487,14 +487,14 @@ function playRound() {
       key = "down";
 
       if (user2.wallInQuestion === false) {
-        user2.y += user2.hostMaze.cellHeight / 2;
+        user2.y += user2.hostMaze.cellHeight / 4;
         update(user2);
-        user2.rowNum += 0.5;
+        user2.rowNum += 0.25;
       } else if (user2.wallInQuestion === true && user2.rowNum % 1 !== 0 && user2.colNum % 1 === 0) {
         user2.wallInQuestion = false;
-        user2.y += user2.hostMaze.cellHeight / 2;
+        user2.y += user2.hostMaze.cellHeight / 4;
         update(user2);
-        user2.rowNum += 0.5;
+        user2.rowNum += 0.25;
       }
     }
 
@@ -503,14 +503,14 @@ function playRound() {
       key = "left";
 
       if (user2.wallInQuestion === false) {
-        user2.x -= user2.hostMaze.cellWidth / 2;
+        user2.x -= user2.hostMaze.cellWidth / 4;
         update(user2);
-        user2.colNum -= 0.5;
+        user2.colNum -= 0.25;
       } else if (user2.wallInQuestion === true && user2.colNum % 1 !== 0 && user2.rowNum % 1 === 0) {
         user2.wallInQuestion = false;
-        user2.x -= user2.hostMaze.cellWidth / 2;
+        user2.x -= user2.hostMaze.cellWidth / 4;
         update(user2);
-        user2.colNum -= 0.5;
+        user2.colNum -= 0.25;
       }
     }
   });
@@ -536,9 +536,9 @@ function playRound() {
 
     if (yellowScore > greenScore) gameWinMessage = "Yellow circle wins!";
     if (greenScore > yellowScore) gameWinMessage = "Green circle wins!";
-    if (greenScore === yellowScore) gameWinMessage = "It's a tie."
+    if (greenScore === yellowScore) gameWinMessage = "It's a tie.";
 
-    if (round === 2) {
+    if (round === 3) {
       gameText.innerHTML += `<br/><br/>Yellow Score: ${yellowScore}<br/>Green Score: ${greenScore}<br/><br/>GAME OVER!<br/>${gameWinMessage}`;
     } else {
       gameText.innerHTML += `<br/><br/>Yellow Score: ${yellowScore}<br/>Green Score: ${greenScore}<br/><br/>If you would like to continue, press Play Again.`;
@@ -558,9 +558,9 @@ function restartAnimation() {
 
   requestAnimationFrame(() => {
     setTimeout(() => {
-      canvas.style.animationName = ""
+      canvas.style.animationName = "";
     }, 0);
-  })
+  });
 }
 
 function reset() {
