@@ -52,7 +52,7 @@ button {
 }
 
 #canvas {
-  margin: 20px;
+  margin: 50px;
   border: none;
   background-image: url(images/asphalt.jpg);
   box-shadow: 0 0 20px 0 grey;

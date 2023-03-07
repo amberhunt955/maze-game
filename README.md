@@ -7,7 +7,7 @@
 
 <p>ROAD TRIP! Who can get to their destination first? Move the yellow circle with the arrow keys. Move the green circle with the AWDS keys. The goal of the yellow circle is to get to the bottom right corner. The goal of the green circle is to get to the top left corner. Arrive to your destination before your opponent to win the round. This game is best of 3.</p>
 
-![game_screenshot](https://user-images.githubusercontent.com/122638466/223016211-77894406-5b21-44d7-b45a-cc22004b95f0.png)
+![game_screenshot](image.png)
 
 ### Built With
 
