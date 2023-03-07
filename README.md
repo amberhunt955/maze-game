@@ -1,6 +1,6 @@
 <h1 align="center" id="readme-top">Maze Game</h1>
 
-<p align="center">Two-player best of 3 game including randomly generated mazes.</p>
+<p align="center">Two-player best of 2 game including randomly generated mazes.</p>
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
