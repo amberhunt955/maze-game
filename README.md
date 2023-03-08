@@ -23,6 +23,7 @@
 - Improved user experience - player continues on path until there is a direction choice
 - More features: "rooms" to visit, prizes to collect, and obstacles to avoid
 - Replace player circles with cars
+- Responsive mobile design
 
 <!-- Project Link -->
 ## Project Link
