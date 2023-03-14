@@ -289,7 +289,7 @@ class Player {
 //&----------------------------------------------------------------
 //& CREATE THREE MAZE INSTANCES AND TWO PLAYER INSTANCES
 
-let firstMaze = new Maze(600, 450, 15, 15);
+let firstMaze = new Maze(600, 450, 25, 25);
 firstMaze.createGrid();
 
 //! These will be added in a later edition
@@ -315,7 +315,7 @@ function playRound() {
     containerDiv.removeChild(startButton);
   }
 
-  body.style.flexDirection = "row";
+  // body.style.flexDirection = "row";
   canvas.style.display = "block";
   round++;
   gameText.innerHTML = `<b>Round ${round}</b><br>Yellow Score: ${yellowScore}<br/>Green Score: ${greenScore}`;
