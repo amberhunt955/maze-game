@@ -6,6 +6,10 @@
   text-shadow: 8px 1px 4px rgb(88, 46, 46), 0 0 1em rgb(100, 42, 50);
 }
 
+html {
+  background-color: #E1EEDD;
+}
+
 body {
   background-image: url("images/road.jpg");
   background-position: center;
@@ -67,7 +71,6 @@ button {
 @media only screen and (max-width: 480px) {
 
   html {
-    background-color: #EDF1D6;
     min-height: 100%;
   }
 
