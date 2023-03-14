@@ -65,6 +65,7 @@ button {
 
   html {
     background-color: #CCD5AE;
+    min-height: 100%;
   }
 
   body {
