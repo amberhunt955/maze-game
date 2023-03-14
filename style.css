@@ -17,6 +17,7 @@ body {
   background-size: cover;
   min-height: 100vh;
   padding-bottom: 10px;
+  overflow: hidden;
 }
 
 h1 {
@@ -64,6 +65,7 @@ button {
 
   body {
     padding: 10px;
+    overflow: scroll;
   }
 
   #container {

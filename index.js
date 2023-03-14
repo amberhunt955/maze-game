@@ -289,7 +289,7 @@ class Player {
 //&----------------------------------------------------------------
 //& CREATE THREE MAZE INSTANCES AND TWO PLAYER INSTANCES
 
-let firstMaze = new Maze(600, 450, 25, 25);
+let firstMaze = new Maze(600, 450, 15, 15);
 firstMaze.createGrid();
 
 //! These will be added in a later edition
