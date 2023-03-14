@@ -9,7 +9,7 @@ let greenScore = 0;
 //&----------------------------------------------------------------
 //& DOM MANIPULATION
 
-const body = document.getElementById("body");
+const body = document.getElementById("body-div");
 
 const h1 = document.querySelector("h1");
 

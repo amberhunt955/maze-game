@@ -7,10 +7,6 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background-image: url("images/road.jpg");
   background-position: center;
   background-repeat: no-repeat;
@@ -18,6 +14,13 @@ body {
   min-height: 100vh;
   padding-bottom: 10px;
   overflow: hidden;
+}
+
+#body-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
