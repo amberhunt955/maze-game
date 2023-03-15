@@ -1,11 +1,13 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   font-family: monospace;
   color: rgb(255, 255, 255);
   text-shadow: 8px 1px 4px rgb(88, 46, 46), 0 0 1em rgb(100, 42, 50);
 }
 
+/* Trying to add viewport background color... */
 html {
   background-color: #434242
 }
@@ -16,6 +18,7 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100vh;
+  min-width: 100vw;
   padding-bottom: 10px;
   overflow: hidden;
 }
@@ -24,77 +27,96 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
+  min-height: 100vh;
 }
 
 h1 {
   font-size: 65px;
   text-transform: uppercase;
+  text-align: center;
 }
 
 #container {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
+  max-height: fit-content;
+  gap: 20px;
 }
 
 p {
-  margin-top: 10px;
-  padding: 20px;
-  min-width: fit-content;
-  max-width: 400px;
+  padding: 15px;
+  /* min-width: fit-content; */
   background-color: rgba(48, 45, 45, 0.6);
   box-shadow: 0 0 20px 0 grey;
-  border-radius: 20px;
+  border-radius: 15px;
   font-size: 24px;
   text-align: center;
 }
 
 button {
-  margin: 10px 0px;
   padding: 20px;
   background-color: black;
   box-shadow: 0 0 10px 0 black;
   border-radius: 20px;
   text-transform: uppercase;
   font-size: 20px;
+  max-width: fit-content;
+}
+
+#entry-text {
+  /* max-width: 90vw; */
+  max-width: 450px;
+}
+
+#game-text {
+  max-width: 90vw;
 }
 
 #canvas {
-  margin: 30px;
-  border: none;
+  /* border: none; */
   background-image: url(images/asphalt.jpg);
   box-shadow: 0 0 20px 0 grey;
   max-height: 70vh;
+  max-width: 90%;
 }
 
 @media only screen and (max-width: 480px) {
 
-  html {
+  /* html {
     min-height: 100%;
-  }
+  } */
 
   body {
-    padding: 10px;
     overflow: scroll;
+    padding: 10px;
   }
 
   #container {
     display: flex;
     flex-direction: column;
-    max-width: 100vw;
+    gap: 20px;
+    max-width: 90vw;
     max-height: 100vh;
     padding: 10px;
     overflow: hidden;
   }
   
   #canvas {
-    max-width: 95%;
-    min-height: 50vh;
+    max-width: 90vw;
+    min-height: 43vh;
+  }
+
+  #entry-text {
+    overflow: scroll;
+    margin: 10px 0px;
   }
 
   #game-text {
-    max-width: 100vw;
+    font-size: 8vw;
+    max-height: fit-content;
   }
 
   }

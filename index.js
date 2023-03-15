@@ -14,8 +14,10 @@ const body = document.getElementById("body-div");
 const h1 = document.querySelector("h1");
 
 const containerDiv = document.getElementById("container");
-const gameText = document.getElementById("game-text");
-gameText.textContent =
+const entryText = document.getElementById("entry-text")
+const gameText = document.createElement("p")
+gameText.id = "game-text";
+entryText.textContent =
   "ROAD TRIP! Who can get to their destination first? Move the yellow circle with the arrow keys. Move the green circle with the AWDS keys. The goal of the yellow circle is to get to the bottom right corner. The goal of the green circle is to get to the top left corner. Arrive to your destination before your opponent to win the round. This game is best of 3. Good luck!";
 
 const startButton = document.getElementById("button");
@@ -311,6 +313,8 @@ function playRound() {
   if (startButton.parentNode === body) {
     body.removeChild(startButton);
     body.removeChild(h1);
+    containerDiv.removeChild(entryText)
+    containerDiv.appendChild(gameText)
   } else if (startButton.parentNode === containerDiv) {
     containerDiv.removeChild(startButton);
   }
@@ -539,9 +543,11 @@ function playRound() {
     if (greenScore === yellowScore) gameWinMessage = "It's a tie.";
 
     if (round === 3) {
-      gameText.innerHTML += `<br/><br/>Yellow Score: ${yellowScore}<br/>Green Score: ${greenScore}<br/><br/>GAME OVER!<br/>${gameWinMessage}`;
+      gameText.innerHTML += `<br/><br/>Yellow Score: ${yellowScore}<br/>Green Score: ${greenScore}<br/><br/>GAME OVER! ${gameWinMessage}`;
+      gameText.style.fontSize = "14px";
     } else {
       gameText.innerHTML += `<br/><br/>Yellow Score: ${yellowScore}<br/>Green Score: ${greenScore}<br/><br/>If you would like to continue, press Play Again.`;
+      gameText.style.fontSize = "14px"
       startButton.textContent = "Play Again";
       containerDiv.appendChild(startButton);
     }
@@ -565,6 +571,8 @@ function restartAnimation() {
 
 function reset() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  gameText.style.fontSize = "24px";
+  // containerDiv.style.minWidth = "450px";
 
   restartAnimation();
 
