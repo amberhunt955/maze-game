@@ -16,11 +16,12 @@
  ![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
 
 <!-- FUTURE IMPROVEMENTS -->
-## Future Improvements
+## Future Improvements & Unresolved Issues
 
 - Smoother animations - they currently decrease significantly in quality with each round
 - Different sized mazes for each level
 - Improved user experience - player continues on path until there is a direction choice
+- Change to a player vs computer format
 - More features: "rooms" to visit, prizes to collect, and obstacles to avoid
 - Replace player circles with cars
 - Responsive mobile design
@@ -33,7 +34,7 @@
 <!-- CONTACT -->
 ## Contact
 
-Amber Hunt - Find me on [LinkedIn](https://www.linkedin.com/in/amber-hunt-90b612263/)
+Amber Hunt - Find me on [LinkedIn](https://www.linkedin.com/in/amberhunt955/).
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
